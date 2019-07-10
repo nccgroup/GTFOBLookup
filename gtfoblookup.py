@@ -28,69 +28,69 @@ def parseArgs():
     parserShell = subparsers.add_parser('shell', help="search for " + 
                                         "applications that can be used to " + 
                                         "spawn an interactive shell")
-    parserShell.set_defaults(func=shell)
+    parserShell.set_defaults(func=search, typ='shell')
     #Command
     parserCmd = subparsers.add_parser('cmd', help="search for applications " + 
                                       "that can be used to run " + 
                                       "non-interactive system commands")
-    parserCmd.set_defaults(func=cmd)
+    parserCmd.set_defaults(func=search, typ='command')
     #Reverse shell
     parserRev = subparsers.add_parser('rev', help="search for applications " + 
                                       "that can be used to spawn a reverse " + 
                                       "shell")
-    parserRev.set_defaults(func=rev)
+    parserRev.set_defaults(func=search, typ='reverse-shell')
     #Non-interactive reverse shell
     parserNrev = subparsers.add_parser('nrev', help="search for applications " + 
                                        "that can be used to spawn a " + 
                                        "non-interactive reverse shell")
-    parserNrev.set_defaults(func=nrev)
+    parserNrev.set_defaults(func=search, typ='non-interactive-reverse-shell')
     #Bind shell
     parserBind = subparsers.add_parser('bind', help="search for applications " + 
                                        "that can be used to spawn a bind shell")
-    parserBind.set_defaults(func=bind)
+    parserBind.set_defaults(func=search, typ='bind-shell')
     #Non-interactive bind shell
     parserNbind = subparsers.add_parser('nbind', help="search for " + 
                                         "applications that can be used to " + 
                                         "spawn a non-interactive bind shell")
-    parserNbind.set_defaults(func=nbind)
+    parserNbind.set_defaults(func=search, typ='non-interactive-bind-shell')
     #File upload
     parserUpload = subparsers.add_parser('upload', help="search for " + 
                                          "applications that can be used to " + 
                                          "upload files")
-    parserUpload.set_defaults(func=upload)
+    parserUpload.set_defaults(func=search, typ='file-upload')
     #File download
     parserDownload = subparsers.add_parser('download', help="search for " + 
                                            "applications that can be used to " +
                                            "download files")
-    parserDownload.set_defaults(func=download)
+    parserDownload.set_defaults(func=search, typ='file-download')
     #File write
     parserWrite = subparsers.add_parser('write', help="search for " + 
                                         "applications that can be used to " + 
                                         "write to files")
-    parserWrite.set_defaults(func=write)
+    parserWrite.set_defaults(func=search, typ='file-write')
     #File read
     parserRead = subparsers.add_parser('read', help="search for applications " +
                                        "that can be used to read files")
-    parserRead.set_defaults(func=read)
+    parserRead.set_defaults(func=search, typ='file-read')
     #Library load
     parserLoad = subparsers.add_parser('load', help="search for applications " +
                                        "that load shared libraries")
-    parserLoad.set_defaults(func=load)
+    parserLoad.set_defaults(func=search, typ='library-load')
     #SUID
     parserSuid = subparsers.add_parser('suid', help="search for applications " +
                                        "that, with the SUID bit set, can be " + 
                                        "used to escalate privileges")
-    parserSuid.set_defaults(func=suid)
+    parserSuid.set_defaults(func=search, typ='suid')
     #Sudo
     parserSudo = subparsers.add_parser('sudo', help="search for applications " + 
                                        "that, when run with sudo, can be used" + 
                                        " to escalate privileges")
-    parserSudo.set_defaults(func=sudo)
+    parserSudo.set_defaults(func=search, typ='sudo')
     #Capabilities
     parserCap = subparsers.add_parser('cap', help="search for applications " + 
                                       "that have the 'CAP_SETUID' capability " +
                                       "set")
-    parserCap.set_defaults(func=cap)
+    parserCap.set_defaults(func=search, typ='capabilities')
     #Limited SUID
     parserLsuid = subparsers.add_parser('lsuid', help="search for " + 
                                         "applications that, with the SUID " + 
@@ -98,11 +98,11 @@ def parseArgs():
                                         "privileges on systems that allow " + 
                                         "the default 'sh' shell to run with " + 
                                         "sudo privileges")
-    parserLsuid.set_defaults(func=lsuid)
+    parserLsuid.set_defaults(func=search, typ='limited-suid')
     #All
     parserAll = subparsers.add_parser('all', help="search for applications " +
                                       "in all categories")
-    parserAll.set_defaults(func=all)
+    parserAll.set_defaults(func=search, typ='all')
     #No args
     if len(sys.argv) == 1:
         parser.print_usage()
@@ -130,82 +130,10 @@ def purge(args):
     """Removes local copy of GTFOBins"""
     shutil.rmtree(repoDir)
     
-def shell(args):
-    """Searches for applications that can be used to spawn an interactive shell
+def search(args):
+    """Searches local copy of GTFOBins for a specified binary in a specified 
+    category
     """
-    #TODO
-    
-def cmd(args):
-    """Searches for applications that can be used to run non-interactive system
-    commands
-    """
-    #TODO
-    
-def rev(args):
-    """Searches for applications that can be used to spawn a reverse shell"""
-    #TODO
-    
-def nrev(args):
-    """Searches for applications that can be used to spawn a non-interactive 
-    reverse shell
-    """
-    #TODO
-    
-def bind(args):
-    """Searches for applications that can be used to spawn a bind shell"""
-    #TODO
-    
-def nbind(args):
-    """Searches for applications that can be used to spawn a non-interactive 
-    bind shell
-    """
-    #TODO
-    
-def upload(args):
-    """Searches for applications that can be used to upload files"""
-    #TODO
-    
-def download(args):
-    """Searches for applications that can be used to download files"""
-    #TODO
-    
-def write(args):
-    """Searches for applications that can be used to write to files"""
-    #TODO
-    
-def read(args):
-    """Searches for applications that can be used to read files"""
-    #TODO
-    
-def load(args):
-    """Searches for applications that load shared libraries"""
-    #TODO
-    
-def suid(args):
-    """Searches for applications that, with the SUID bit set, can be used to 
-    escalate privileges
-    """
-    #TODO
-    
-def sudo(args):
-    """Searches for applications that, when run with sudo, can be used to 
-    escalate privileges
-    """
-    #TODO
-    
-def cap(args):
-    """Searches for applications that have the 'CAP_SETUID' capability set"""
-    #TODO
-
-def lsuid(args):
-    """Searches for applications that, with the SUID bit set, can be used to 
-    escalate privileges on systems that allow the default 'sh' shell to run 
-    with sudo privileges
-    """
-    #TODO
-    
-def all(args):
-    """Searches for applications in all categories"""
     #TODO
         
         
