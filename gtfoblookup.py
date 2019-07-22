@@ -3,10 +3,11 @@
 
 import argparse
 from git import Repo
-from md2py import md2py
 import os
 import shutil
 import sys
+import textwrap
+import yaml
 
 
 repoDir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 
@@ -171,7 +172,22 @@ def extract(typ, md):
     """Extracts details of a specified function of a specified binary from local
     copy of GTFOBins
     """
-    #TODO
+    print("    {0}:".format(typ))
+    for data in md:
+            if data is not None:
+                try:
+                    for header in data['functions'][typ]:
+                        for text in header:
+                            lines = header[text].split("\n")
+                            for line in lines:
+                                if line != '':
+                                    print(textwrap.fill(line, width=80,
+                                          initial_indent="            ", 
+                                          subsequent_indent="            "))
+                            print("\n")
+                except:
+                    print("No results of type '{0}' were found ".format(typ) + 
+                          "for this binary")
 
 def search(args):
     """Searches local copy of GTFOBins for a specified binary in a specified 
@@ -182,8 +198,9 @@ def search(args):
     mdPath = os.path.join(repoDir, "_gtfobins", "{0}.md".format(args.binary))
     if os.path.isfile(mdPath):
         with open(mdPath, 'r') as f:
-            md = md2py(f.read())
-        if args.typ == "All":
+            md = yaml.load_all(f.read())
+        print(args.binary)
+        if args.typ == "all":
             for typ in types.values():
                 extract(typ, md)
         else:
