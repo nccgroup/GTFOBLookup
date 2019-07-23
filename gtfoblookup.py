@@ -31,6 +31,7 @@ types = {"shell": "shell",
         }
 
 #Text formatting
+green = "\033[32m"
 red = "\033[31m"
 yellow = "\033[33m"
 reset = "\033[0m"
@@ -162,16 +163,16 @@ def update(args):
         current = repo.head.commit
         repo.remotes.origin.pull()
         if current == repo.head.commit:
-            print("Local copy of GTFOBins is up to date")
+            print(green + "Local copy of GTFOBins is up to date" + reset)
         else:
-            print("Local copy of GTFOBins updated")
+            print(green + "Local copy of GTFOBins updated" + reset)
             
 def purge(args):
     """Removes local copy of GTFOBins"""
     if os.path.exists(repoDir):
         shutil.rmtree(repoDir)
     else:
-        print("Local copy of GTFOBins not found")
+        print(red + "Local copy of GTFOBins not found" + reset)
     
 def extract(typ, md):
     """Extracts details of a specified function of a specified binary from local
