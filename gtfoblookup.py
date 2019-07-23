@@ -30,6 +30,11 @@ types = {"shell": "shell",
          "lsuid": "limited-suid"
         }
 
+#Text formatting
+red = "\033[31m"
+yellow = "\033[33m"
+reset = "\033[0m"
+
 
 def parseArgs():
     """Parses command line arguments"""
@@ -172,22 +177,26 @@ def extract(typ, md):
     """Extracts details of a specified function of a specified binary from local
     copy of GTFOBins
     """
-    print("    {0}:".format(typ))
+    print("    {0}:\n".format(typ))
     for data in md:
             if data is not None:
                 try:
                     for header in data['functions'][typ]:
                         for text in header:
                             lines = header[text].split("\n")
+                            indent = "        "
+                            if text == "code":
+                                print(yellow)
+                                indent += "    "
                             for line in lines:
                                 if line != '':
                                     print(textwrap.fill(line, width=80,
-                                          initial_indent="            ", 
-                                          subsequent_indent="            "))
-                            print("\n")
+                                          initial_indent=indent, 
+                                          subsequent_indent=indent))
+                            print("\n" + reset)
                 except:
-                    print("No results of type '{0}' were found ".format(typ) + 
-                          "for this binary")
+                    print(red + "        No results of this type were found " +
+                          "for this binary \n" + reset)
 
 def search(args):
     """Searches local copy of GTFOBins for a specified binary in a specified 
@@ -198,16 +207,18 @@ def search(args):
     mdPath = os.path.join(repoDir, "_gtfobins", "{0}.md".format(args.binary))
     if os.path.isfile(mdPath):
         with open(mdPath, 'r') as f:
-            md = yaml.load_all(f.read())
-        print(args.binary)
+            md = f.read()
+        print("{0}:\n".format(args.binary))
         if args.typ == "all":
             for typ in types.values():
-                extract(typ, md)
+                mdParsed = yaml.load_all(md)
+                extract(typ, mdParsed)
         else:
-            extract(args.typ, md)
+            mdParsed = yaml.load_all(md)
+            extract(args.typ, mdParsed)
     else:
-        sys.exit("{0} was not found in the local copy of GTFOBins".format(
-                 args.binary))
+        sys.exit(red + "'{0}' was not found in the local copy of ".format(
+                 args.binary) + "GTFOBins" + reset)
         
         
 if __name__ == "__main__":
