@@ -204,7 +204,8 @@ def search(args):
     category
     """
     if not os.path.exists(repoDir):
-        sys.exit("Local copy of GTFOBins not found, please update")
+        sys.exit(red + "Local copy of GTFOBins not found, please update" + 
+                 reset)
     mdPath = os.path.join(repoDir, "_gtfobins", "{0}.md".format(args.binary))
     if os.path.isfile(mdPath):
         with open(mdPath, 'r') as f:
