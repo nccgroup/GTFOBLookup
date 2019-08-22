@@ -27,7 +27,8 @@ types = {"shell": "shell",
          "suid": "suid",
          "sudo": "sudo",
          "cap": "capabilities",
-         "lsuid": "limited-suid"
+         "lsuid": "limited-suid",
+         "all": "all"
         }
 
 #Text formatting
@@ -41,118 +42,21 @@ def parseArgs():
     """Parses command line arguments"""
     parser = argparse.ArgumentParser(description='Offline GTFOBins Lookup')
     subparsers = parser.add_subparsers()
-    typParsers = []
-    #Update
-    parserUpdate = subparsers.add_parser('update', help="update local copy " + 
-                                         "of GTFOBins")
-    parserUpdate.set_defaults(func=update)
-    #Purge
-    parserPurge = subparsers.add_parser('purge', help="remove local copy of " + 
-                                        "GTFOBins")
-    parserPurge.set_defaults(func=purge)
-    #Shell
-    parserShell = subparsers.add_parser('shell', help="search for " + 
-                                        "applications that can be used to " + 
-                                        "spawn an interactive shell")
-    parserShell.set_defaults(typ=types['shell'])
-    typParsers.append("parserShell")
-    #Command
-    parserCmd = subparsers.add_parser('cmd', help="search for applications " + 
-                                      "that can be used to run " + 
-                                      "non-interactive system commands")
-    parserCmd.set_defaults(typ=types['cmd'])
-    typParsers.append("parserCmd")
-    #Reverse shell
-    parserRev = subparsers.add_parser('rev', help="search for applications " + 
-                                      "that can be used to spawn a reverse " + 
-                                      "shell")
-    parserRev.set_defaults(typ=types['rev'])
-    typParsers.append("parserRev")
-    #Non-interactive reverse shell
-    parserNrev = subparsers.add_parser('nrev', help="search for applications " + 
-                                       "that can be used to spawn a " + 
-                                       "non-interactive reverse shell")
-    parserNrev.set_defaults(typ=types['nrev'])
-    typParsers.append("parserNrev")
-    #Bind shell
-    parserBind = subparsers.add_parser('bind', help="search for applications " + 
-                                       "that can be used to spawn a bind shell")
-    parserBind.set_defaults(typ=types['bind'])
-    typParsers.append("parserBind")
-    #Non-interactive bind shell
-    parserNbind = subparsers.add_parser('nbind', help="search for " + 
-                                        "applications that can be used to " + 
-                                        "spawn a non-interactive bind shell")
-    parserNbind.set_defaults(typ=types['nbind'])
-    typParsers.append("parserNbind")
-    #File upload
-    parserUpload = subparsers.add_parser('upload', help="search for " + 
-                                         "applications that can be used to " + 
-                                         "upload files")
-    parserUpload.set_defaults(typ=types['upload'])
-    typParsers.append("parserUpload")
-    #File download
-    parserDownload = subparsers.add_parser('download', help="search for " + 
-                                           "applications that can be used to " +
-                                           "download files")
-    parserDownload.set_defaults(typ=types['download'])
-    typParsers.append("parserDownload")
-    #File write
-    parserWrite = subparsers.add_parser('write', help="search for " + 
-                                        "applications that can be used to " + 
-                                        "write to files")
-    parserWrite.set_defaults(typ=types['write'])
-    typParsers.append("parserWrite")
-    #File read
-    parserRead = subparsers.add_parser('read', help="search for applications " +
-                                       "that can be used to read files")
-    parserRead.set_defaults(typ=types['read'])
-    typParsers.append("parserRead")
-    #Library load
-    parserLoad = subparsers.add_parser('load', help="search for applications " +
-                                       "that load shared libraries")
-    parserLoad.set_defaults(typ=types['load'])
-    typParsers.append("parserLoad")
-    #SUID
-    parserSuid = subparsers.add_parser('suid', help="search for applications " +
-                                       "that, with the SUID bit set, can be " + 
-                                       "used to escalate privileges")
-    parserSuid.set_defaults(typ=types['suid'])
-    typParsers.append("parserSuid")
-    #Sudo
-    parserSudo = subparsers.add_parser('sudo', help="search for applications " + 
-                                       "that, when run with sudo, can be used" + 
-                                       " to escalate privileges")
-    parserSudo.set_defaults(typ=types['sudo'])
-    typParsers.append("parserSudo")
-    #Capabilities
-    parserCap = subparsers.add_parser('cap', help="search for applications " + 
-                                      "that have the 'CAP_SETUID' capability " +
-                                      "set")
-    parserCap.set_defaults(typ=types['cap'])
-    typParsers.append("parserCap")
-    #Limited SUID
-    parserLsuid = subparsers.add_parser('lsuid', help="search for " + 
-                                        "applications that, with the SUID " + 
-                                        "bit set, can be used to escalate " + 
-                                        "privileges on systems that allow " + 
-                                        "the default 'sh' shell to run with " + 
-                                        "sudo privileges")
-    parserLsuid.set_defaults(typ=types['lsuid'])
-    typParsers.append("parserLsuid")
-    #All
-    parserAll = subparsers.add_parser('all', help="search for applications " +
-                                      "in all categories")
-    parserAll.set_defaults(typ="all")
-    typParsers.append("parserAll")
-    #Set common properties
-    for subparser in typParsers:
-        subparser = vars()[subparser]
-        subparser.set_defaults(func=search)
-        subparser.add_argument('-f', '--file', help="use a file containing a " +
-                  "list of binaries \(one per line\) instead of a single " +
-                  "binary", action='store_const', const=parseFile, dest='func')
-        subparser.add_argument('binary', help='the binary to search for')
+    for typ in types:
+        parserName = "parser{0}".format(typ)
+        if typ == "all":
+            helptxt = "search all categories of GTFOBins"
+        else:
+            helptxt = "search the '{0}' category of GTFOBins".format(types[typ])
+        vars()[parserName] = subparsers.add_parser(typ, help=helptxt)
+        vars()[parserName].set_defaults(func=search, typ=types[typ])
+        vars()[parserName].add_argument('-f', '--file', help="use a file " + 
+                                        "containing a list of binaries (one " +
+                                        "per line) instead of a single binary", 
+                                        action='store_const', const=parseFile, 
+                                        dest='func')
+        vars()[parserName].add_argument('binary', help='the binary to search ' +
+                                        'for')
     #No args
     if len(sys.argv) == 1:
         parser.print_usage()
@@ -219,11 +123,12 @@ def search(args):
     if os.path.isfile(mdPath):
         with open(mdPath, 'r') as f:
             md = f.read()
-        print("{0}:\n".format(args.binary))
+        print(green + "{0}:\n".format(args.binary) + reset)
         if args.typ == "all":
             for typ in types.values():
-                mdParsed = yaml.load_all(md)
-                extract(typ, mdParsed)
+                if typ != "all":
+                    mdParsed = yaml.load_all(md)
+                    extract(typ, mdParsed)
         else:
             mdParsed = yaml.load_all(md)
             extract(args.typ, mdParsed)
