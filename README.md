@@ -1,12 +1,13 @@
+<pre>
 # GTFOBLookup
 Offline command line lookup utility for [GTFOBins](https://github.com/GTFOBins/GTFOBins.github.io)
 
-##usage
+## usage
 
 gtfoblookup.py [-h]
     {update,purge,shell,cmd,rev,nrev,bind,nbind,upload,download,write,read,load,suid,sudo,cap,lsuid,all}...
 
-Offline command line lookup utility for GTFOBins ([https://gtfobins.github.io/]\(https://gtfobins.github.io/\))
+Offline command line lookup utility for GTFOBins ([https://gtfobins.github.io/](https://gtfobins.github.io/))
 
 positional arguments:
   {update,purge,shell,cmd,rev,nrev,bind,nbind,upload,download,write,read,load,suid,sudo,cap,lsuid,all}
@@ -45,3 +46,4 @@ optional arguments:
   -h, --help  show this help message and exit
   -f, --file  use a file containing a list of binaries (one per line) instead
               of a single binary
+</pre>
