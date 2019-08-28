@@ -1,13 +1,15 @@
-<pre>
 # GTFOBLookup
 Offline command line lookup utility for [GTFOBins](https://github.com/GTFOBins/GTFOBins.github.io)
 
 ## usage
+<pre>
 
 gtfoblookup.py [-h]
     {update,purge,shell,cmd,rev,nrev,bind,nbind,upload,download,write,read,load,suid,sudo,cap,lsuid,all}...
 
+</pre>
 Offline command line lookup utility for GTFOBins ([https://gtfobins.github.io/](https://gtfobins.github.io/))
+<pre>
 
 positional arguments:
   {update,purge,shell,cmd,rev,nrev,bind,nbind,upload,download,write,read,load,suid,sudo,cap,lsuid,all}
