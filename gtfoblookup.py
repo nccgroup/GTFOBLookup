@@ -52,7 +52,7 @@ def parseArgs():
     parserPurge.set_defaults(func=purge)
     #Types
     for typ in types:
-        parserName = "parser{0}".format(typ)
+        parserName = "parser{0}".format(typ.capitalize)
         if typ == "all":
             helptxt = "search all categories of GTFOBins"
         else:
