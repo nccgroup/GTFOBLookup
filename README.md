@@ -36,7 +36,7 @@ optional arguments:
 </pre>
 Each GTFOBins category can be searched using the following syntax:
 <pre>
-gtfoblookup.py &gt;category&lt; [-h] [-f] binary
+gtfoblookup.py &lt;category&gt; [-h] [-f] binary
 
 positional arguments:
   binary      the binary to search for
