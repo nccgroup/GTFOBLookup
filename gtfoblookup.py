@@ -42,6 +42,15 @@ def parseArgs():
     """Parses command line arguments"""
     parser = argparse.ArgumentParser(description='Offline GTFOBins Lookup')
     subparsers = parser.add_subparsers()
+    #Update
+    parserUpdate = subparsers.add_parser('update', help="update local copy " + 
+                                         "of GTFOBins")
+    parserUpdate.set_defaults(func=update)
+    #Purge
+    parserPurge = subparsers.add_parser('purge', help="remove local copy of " + 
+                                        "GTFOBins")
+    parserPurge.set_defaults(func=purge)
+    #Types
     for typ in types:
         parserName = "parser{0}".format(typ)
         if typ == "all":
