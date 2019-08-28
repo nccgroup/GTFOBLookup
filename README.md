@@ -1,5 +1,5 @@
 # GTFOBLookup
-Offline command line lookup utility for [GTFOBins](https://github.com/GTFOBins/GTFOBins.github.io)
+Offline command line lookup utility for [GTFOBins](https://github.com/GTFOBins/GTFOBins.github.io).
 
 ## usage
 <pre>
@@ -36,7 +36,7 @@ optional arguments:
 </pre>
 Each GTFOBins category can be searched using the following syntax:
 <pre>
-gtfoblookup.py \<category\> [-h] [-f] binary
+gtfoblookup.py &gt;category&lt; [-h] [-f] binary
 
 positional arguments:
   binary      the binary to search for
