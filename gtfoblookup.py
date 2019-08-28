@@ -40,7 +40,9 @@ reset = "\033[0m"
 
 def parseArgs():
     """Parses command line arguments"""
-    parser = argparse.ArgumentParser(description='Offline GTFOBins Lookup')
+    parser = argparse.ArgumentParser(description='Offline command line lookup' +
+                                     ' utility for GTFOBins ' + 
+                                     '(https://gtfobins.github.io/)')
     subparsers = parser.add_subparsers()
     #Update
     parserUpdate = subparsers.add_parser('update', help="update local copy " + 
