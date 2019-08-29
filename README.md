@@ -2,7 +2,7 @@
 Offline command line lookup utility for [GTFOBins](https://github.com/GTFOBins/GTFOBins.github.io).
 
 ## Installation/Setup
-To install GTFOBLookup, git clone the repository to your machine and run the following command:
+To install GTFOBLookup, git clone the repository to your machine and run the following command whilst connected to the internet:
 <pre>
 gtfoblookup.py update
 </pre>
