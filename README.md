@@ -10,7 +10,7 @@ gtfoblookup.py update
 ## usage
 <pre>
 gtfoblookup.py [-h]
-    {update,purge,shell,cmd,rev,nrev,bind,nbind,upload,download,write,read,load,suid,sudo,cap,lsuid,all}...
+    {update,purge,list,shell,cmd,rev,nrev,bind,nbind,upload,download,write,read,load,suid,sudo,cap,lsuid,all}...
 
 Offline command line lookup utility for GTFOBins (https://gtfobins.github.io/)
 
@@ -18,6 +18,8 @@ positional arguments:
   {update,purge,shell,cmd,rev,nrev,bind,nbind,upload,download,write,read,load,suid,sudo,cap,lsuid,all}
     update              update local copy of GTFOBins
     purge               remove local copy of GTFOBins
+    list                list the binaries featured in the local copy of
+                        GTFOBins
     shell               search the 'shell' category of GTFOBins
     cmd                 search the 'command' category of GTFOBins
     rev                 search the 'reverse-shell' category of GTFOBins

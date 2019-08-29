@@ -52,6 +52,11 @@ def parseArgs():
     parserPurge = subparsers.add_parser('purge', help="remove local copy of " + 
                                         "GTFOBins")
     parserPurge.set_defaults(func=purge)
+    #Purge
+    parserList = subparsers.add_parser('list', help="list the binaries " +
+                                       "featured in the local copy of " + 
+                                       "GTFOBins")
+    parserList.set_defaults(func=listBins)
     #Types
     for typ in types:
         parserName = "parser{0}".format(typ.capitalize)
@@ -74,6 +79,12 @@ def parseArgs():
         sys.exit(0)
     else:
         return parser.parse_args()
+    
+def binCheck():
+    """Exits the program if no local copy of GTFOBins is found"""
+    if not os.path.exists(repoDir):
+        sys.exit(red + "Local copy of GTFOBins not found, please update" + 
+                 reset)
 
 def update(args):
     """Updates local copy of GTFOBins"""
@@ -97,6 +108,22 @@ def purge(args):
         shutil.rmtree(repoDir)
     else:
         print(red + "Local copy of GTFOBins not found" + reset)
+        
+def listBins(args):
+    """Lists the binaries featured in local copy of GTFOBins"""
+    binCheck()
+    bins = []
+    for file in os.listdir(os.path.join(repoDir, "_gtfobins")):
+        if file.endswith(".md"):
+            bins.append(file[:-3])
+    splitBins = [bins[x:x+5] for x in range(0, len(bins), 5)]
+    maxLen = len(max(bins, key=len))
+    lineFormat = "{:<" + str(maxLen + 3) + "}"
+    for line in splitBins:
+        lineOut = ""
+        for binary in line:
+            lineOut += lineFormat.format(binary)
+        print(lineOut)
     
 def extract(typ, md):
     """Extracts details of a specified function of a specified binary from local
@@ -127,9 +154,7 @@ def search(args):
     """Searches local copy of GTFOBins for a specified binary in a specified 
     category
     """
-    if not os.path.exists(repoDir):
-        sys.exit(red + "Local copy of GTFOBins not found, please update" + 
-                 reset)
+    binCheck()
     mdPath = os.path.join(repoDir, "_gtfobins", "{0}.md".format(args.binary))
     if os.path.isfile(mdPath):
         with open(mdPath, 'r') as f:
