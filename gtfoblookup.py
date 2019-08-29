@@ -11,7 +11,7 @@ import yaml
 
 
 repoDir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 
-                                  "GTFOBins.github.io")
+                       "GTFOBins.github.io")
 
 types = {"shell": "shell",
          "cmd": "command",
@@ -40,9 +40,9 @@ reset = "\033[0m"
 
 def parseArgs():
     """Parses command line arguments"""
-    parser = argparse.ArgumentParser(description='Offline command line lookup' +
-                                     ' utility for GTFOBins ' + 
-                                     '(https://gtfobins.github.io/)')
+    parser = argparse.ArgumentParser(description="Offline command line lookup" +
+                                     " utility for GTFOBins " + 
+                                     "(https://gtfobins.github.io/)")
     subparsers = parser.add_subparsers()
     #Update
     parserUpdate = subparsers.add_parser('update', help="update local copy " + 
@@ -145,7 +145,7 @@ def search(args):
             extract(args.typ, mdParsed)
     else:
         print(red + "'{0}' was not found in the local copy of ".format(
-                 args.binary) + "GTFOBins" + reset)
+              args.binary) + "GTFOBins" + reset)
 
 def parseFile(args):
     """Parses a list of binaries in a supplied file"""
