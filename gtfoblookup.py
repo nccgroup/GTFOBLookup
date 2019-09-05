@@ -4,37 +4,80 @@
 import argparse
 from git import Repo
 import os
+import re
 import shutil
 import sys
 import textwrap
 import yaml
 
 
-repoDir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 
-                       "GTFOBins.github.io")
-
-types = {"shell": "shell",
-         "cmd": "command",
-         "rev": "reverse-shell",
-         "nrev": "non-interactive-reverse-shell",
-         "bind": "bind-shell",
-         "nbind": "non-interactive-bind-shell",
-         "upload": "file-upload",
-         "download": "file-download",
-         "write": "file-write",
-         "read": "file-read",
-         "load": "library-load",
-         "suid": "suid",
-         "sudo": "sudo",
-         "cap": "capabilities",
-         "lsuid": "limited-suid",
-         "all": "all"
+repos = {"GTFOBins": {
+                    "url": "https://github.com/GTFOBins/GTFOBins.github.io.git",
+                    "dir": os.path.join(os.path.dirname(
+                                                     os.path.abspath(__file__)), 
+                                                     "GTFOBins.github.io"),
+                    "exeDirs": ["_gtfobins"],
+                    "exeFileExt": ".md",
+                    "opSys": "linux",
+                    "cats": {"shell": "shell",
+                             "cmd": "command",
+                             "rev": "reverse-shell",
+                             "nrev": "non-interactive-reverse-shell",
+                             "bind": "bind-shell",
+                             "nbind": "non-interactive-bind-shell",
+                             "upload": "file-upload",
+                             "download": "file-download",
+                             "write": "file-write",
+                             "read": "file-read",
+                             "load": "library-load",
+                             "suid": "suid",
+                             "sudo": "sudo",
+                             "cap": "capabilities",
+                             "lsuid": "limited-suid",
+                             "all": "all"
+                            },
+                    "types": {},
+                    "searchFunc": "gtfobSearch"
+                    },
+         "LOLBAS": {"url": "https://github.com/LOLBAS-Project/LOLBAS.git", 
+                    "dir": os.path.join(os.path.dirname(
+                                                     os.path.abspath(__file__)), 
+                                                     "LOLBAS"),
+                    "exeDirs": ["yml/OSBinaries", "yml/OSLibraries", 
+                                "yml/OSScripts", "yml/OtherMSBinaries"],
+                    "exeFileExt": ".yml",
+                    "opSys": "windows",
+                    "cats": {"ads": "ADS",
+                             "awl": "AWL Bypass",
+                             "comp": "Compile",
+                             "copy": "Copy",
+                             "creds": "Credentials",
+                             "decode": "Decode",
+                             "download": "Download",
+                             "dump": "Dump",
+                             "encode": "Encode",
+                             "exec": "Execute",
+                             "recon": "Reconnaissance",
+                             "uac": "UAC Bypass",
+                             "upload": "Upload",
+                             "all": "all"
+                             },
+                    "types": {"bin": {"name": "Binary", "exeDirsIdx": 0},
+                              "lib": {"name": "Library", "exeDirsIdx": 1},
+                              "script": {"name": "Script", "exeDirsIdx": 2},
+                              "other": {"name": "OtherMSBinary", 
+                                        "exeDirsIdx": 3},
+                              "all": {"name": "all"}
+                             },
+                    "searchFunc": "lolbasSearch"
+                   }
         }
 
 #Text formatting
 green = "\033[32m"
 red = "\033[31m"
 yellow = "\033[33m"
+bold = "\033[1m"
 reset = "\033[0m"
 
 
@@ -42,7 +85,10 @@ def parseArgs():
     """Parses command line arguments"""
     parser = argparse.ArgumentParser(description="Offline command line lookup" +
                                      " utility for GTFOBins " + 
-                                     "(https://gtfobins.github.io/)")
+                                     "(https://gtfobins.github.io/) and " +
+                                     "LOLBAS " + 
+                                     "(https://lolbas-project.github.io/)")
+    parser.set_defaults(func=printUsage, parser=parser)
     subparsers = parser.add_subparsers()
     #Update
     parserUpdate = subparsers.add_parser('update', help="update local copy " + 
@@ -52,133 +98,311 @@ def parseArgs():
     parserPurge = subparsers.add_parser('purge', help="remove local copy of " + 
                                         "GTFOBins")
     parserPurge.set_defaults(func=purge)
-    #Purge
-    parserList = subparsers.add_parser('list', help="list the binaries " +
+    #Linux
+    parserLinux = subparsers.add_parser('linux', help="search the local copy " +
+                                        "of GTFOBins")
+    parserLinux.set_defaults(func=printUsage, parser=parserLinux, 
+                             repo="GTFOBins")
+    linSubparsers = parserLinux.add_subparsers()
+    #Linux list
+    parserLinList = linSubparsers.add_parser('list', help="list all binaries " +
                                        "featured in the local copy of " + 
                                        "GTFOBins")
-    parserList.set_defaults(func=listBins)
-    #Types
-    for typ in types:
-        parserName = "parser{0}".format(typ.capitalize)
-        if typ == "all":
-            helptxt = "search all categories of GTFOBins"
-        else:
-            helptxt = "search the '{0}' category of GTFOBins".format(types[typ])
-        vars()[parserName] = subparsers.add_parser(typ, help=helptxt)
-        vars()[parserName].set_defaults(func=search, typ=types[typ])
-        vars()[parserName].add_argument('-f', '--file', help="use a file " + 
-                                        "containing a list of binaries (one " +
-                                        "per line) instead of a single binary", 
-                                        action='store_const', const=parseFile, 
-                                        dest='func')
-        vars()[parserName].add_argument('binary', help='the binary to search ' +
-                                        'for')
-    #No args
-    if len(sys.argv) == 1:
-        parser.print_usage()
-        sys.exit(0)
-    else:
-        return parser.parse_args()
+    parserLinList.set_defaults(func=listExes)
+    #Windows
+    parserWindows = subparsers.add_parser('windows', help="search the local " +
+                                        "copy of LOLBAS")
+    parserWindows.set_defaults(func=printUsage, parser=parserWindows, 
+                               repo="LOLBAS")
+    winSubparsers = parserWindows.add_subparsers()
+    #Windows list
+    parserWinList = winSubparsers.add_parser('list', help="list all " + 
+                                             "executables featured in the " + 
+                                             "local copy of LOLBAS")
+    parserWinList.set_defaults(func=listExes)
+    #Categories
+    for repo in repos:
+        for cat in repos[repo]['cats']:
+            parserName = "parser{0}{1}".format(
+                                            repos[repo]['opSys'][:3].capitalize,
+                                            cat.capitalize)
+            if cat == "all":
+                helptxt = "search all categories of {0}".format(repo)
+            else:
+                helptxt = ("search the '{0}".format(repos[repo]['cats'][cat]) +
+                           "' category of {0}".format(repo))
+            parentParser = "{0}Subparsers".format(repos[repo]['opSys'][:3])
+            vars()[parserName] = locals()[parentParser].add_parser(cat, 
+                                                                   help=helptxt)
+            vars()[parserName].set_defaults(func=search, 
+                                            cat=repos[repo]['cats'][cat], 
+                                            typ="all")
+            vars()[parserName].add_argument('-f', '--file', help="use a file " + 
+                                            "containing a list of executables" +
+                                            " (one per line) instead of a " +
+                                            "single executable", 
+                                            action='store_const', 
+                                            const=parseFile, 
+                                            dest='func')
+            #Types
+            if repos[repo]['types']:
+                vars()[parserName].add_argument('-t', '--type', 
+                                                help="search for a specific " +
+                                                "type of executable", 
+                                                metavar="type",
+                                                action='store', dest='typ')
+            vars()[parserName].add_argument('executable', 
+                                            help='the executable to search for')
+            
+    return parser.parse_args()
     
-def binCheck():
-    """Exits the program if no local copy of GTFOBins is found"""
-    if not os.path.exists(repoDir):
-        sys.exit(red + "Local copy of GTFOBins not found, please update" + 
-                 reset)
+def printUsage(args):
+    """Prints parser usage instructions for a given parser"""
+    args.parser.print_usage()
+    
+def repCheck(repo):
+    """Exits the program if no local copy of the specified repo is found"""
+    if not os.path.exists(repos[repo]['dir']):
+        sys.exit(red + "Local copy of {0} not found, please ".format(repo) + 
+                 "update" + reset)
 
 def update(args):
-    """Updates local copy of GTFOBins"""
-    repoUrl = "https://github.com/GTFOBins/GTFOBins.github.io.git"
-    print("Checking {0} for updates...".format(repoUrl))
-    if not os.path.exists(repoDir):
-        print("Local copy of GTFOBins not found, downloading...")
-        Repo.clone_from(repoUrl, repoDir)
-    else:
-        repo = Repo(repoDir)
-        current = repo.head.commit
-        repo.remotes.origin.pull()
-        if current == repo.head.commit:
-            print(green + "Local copy of GTFOBins is up to date" + reset)
+    """Updates local copies of GTFOBins and LOLBAS"""
+    for repo in repos:
+        print("Checking {0} for updates...".format(repo))
+        if not os.path.exists(repos[repo]['dir']):
+            print("Local copy of {0} not found, downloading...".format(repo))
+            Repo.clone_from(repos[repo]['url'], repos[repo]['dir'])
+            print(green + "Local copy of {0} downloaded".format(repo) + reset)
         else:
-            print(green + "Local copy of GTFOBins updated" + reset)
+            rep = Repo(repos[repo]['dir'])
+            current = rep.head.commit
+            rep.remotes.origin.pull()
+            if current == rep.head.commit:
+                print(green + "Local copy of {0} is up to date".format(repo) + 
+                      reset)
+            else:
+                print(green + "Local copy of {0} updated".format(repo) + reset)
             
 def purge(args):
-    """Removes local copy of GTFOBins"""
-    if os.path.exists(repoDir):
-        shutil.rmtree(repoDir)
-    else:
-        print(red + "Local copy of GTFOBins not found" + reset)
+    """Removes local copies of GTFOBins and LOLBAS"""
+    for repo in repos:
+        if os.path.exists(repos[repo]['dir']):
+            shutil.rmtree(repos[repo]['dir'])
+            print(green + "Local copy of {0} deleted".format(repo) + reset)
+        else:
+            print(red + "Local copy of {0} not found".format(repo) + reset)
         
-def listBins(args):
-    """Lists the binaries featured in local copy of GTFOBins"""
-    binCheck()
-    bins = []
-    for file in os.listdir(os.path.join(repoDir, "_gtfobins")):
-        if file.endswith(".md"):
-            bins.append(file[:-3])
-    splitBins = [bins[x:x+5] for x in range(0, len(bins), 5)]
-    maxLen = len(max(bins, key=len))
+def parseYaml(path):
+    """Parses yaml found in file at given path"""
+    with open(path) as f:
+        yml = f.read()
+    return yaml.load_all(yml)
+        
+def listExes(args):
+    """Lists the executables featured in the local copy of a repo"""
+    repCheck(args.repo)
+    exes = []
+    for folder in repos[args.repo]['exeDirs']:
+        for file in os.listdir(os.path.join(repos[args.repo]['dir'], folder)):
+            if file.endswith(repos[args.repo]['exeFileExt']):
+                if repos[args.repo]['exeFileExt'] == ".md":
+                    exes.append(file[:-3])
+                elif repos[args.repo]['exeFileExt'] == ".yml":
+                    ymlParsed = parseYaml(os.path.join(repos[args.repo]['dir'], 
+                                          folder, file), 'r')
+                    for data in ymlParsed:
+                        if data is not None:
+                            exes.append(data['Name'])
+    maxLen = len(max(exes, key=len))
+    cols = 5
+    cols -= maxLen / 20
+    cols = int(cols)
+    if cols == 0:
+        cols += 1
+    splitExes = [exes[x:x+cols] for x in range(0, len(exes), cols)]
     lineFormat = "{:<" + str(maxLen + 3) + "}"
-    for line in splitBins:
+    for line in splitExes:
         lineOut = ""
-        for binary in line:
-            lineOut += lineFormat.format(binary)
+        for executable in line:
+            lineOut += lineFormat.format(executable)
         print(lineOut)
+        
+def errorNoCatResults():
+    """Prints no results found for this exe error"""
+    print(red + "        No results of this type were found " +
+                          "for this executable \n" + reset)
     
-def extract(typ, md):
-    """Extracts details of a specified function of a specified binary from local
-    copy of GTFOBins
+def calcSubIndent(initIndent, title, addSpacing):
+    """Generates subindent based on given title, initial indent, and additional 
+    spacing
     """
-    print("    {0}:\n".format(typ))
+    subIndent = initIndent
+    for i in range(len(title) + addSpacing):
+        subIndent += " "
+    return subIndent
+    
+def extractMd(cat, path):
+    """Extracts details of a specified function of a specified binary from the 
+    local copy of GTFOBins
+    """
+    print("    {0}{1}{2}:\n".format(bold, cat, reset))
+    md = parseYaml(path)
+    indent = "        "
     for data in md:
             if data is not None:
                 try:
-                    for header in data['functions'][typ]:
-                        for text in header:
-                            lines = header[text].split("\n")
-                            indent = "        "
-                            if text == "code":
-                                print(yellow)
-                                indent += "    "
+                    for func in data['functions'][cat]:
+                        for attr in func:
+                            lines = func[attr].split("\n")
+                            initLine = "{0}{1}{2}: {3}".format(bold, 
+                                                           attr.capitalize(),
+                                                           reset, lines[0])
+                            lines.pop(0)
+                            subIndent = calcSubIndent(indent, attr, 2)
+                            print(textwrap.fill(initLine, width=80,
+                                                  initial_indent=indent, 
+                                                  subsequent_indent=subIndent))
                             for line in lines:
                                 if line != '':
                                     print(textwrap.fill(line, width=80,
-                                          initial_indent=indent, 
-                                          subsequent_indent=indent))
-                            print("\n" + reset)
+                                          initial_indent=subIndent, 
+                                          subsequent_indent=subIndent))
+                        print() #Prints newline character
                 except:
-                    print(red + "        No results of this type were found " +
-                          "for this binary \n" + reset)
-
-def search(args):
-    """Searches local copy of GTFOBins for a specified binary in a specified 
-    category
+                    errorNoCatResults()
+                    
+def splitOnCap(string):
+    """Splits a string into words based on capitalisation whilst preserving 
+    acronyms
     """
-    binCheck()
-    mdPath = os.path.join(repoDir, "_gtfobins", "{0}.md".format(args.binary))
-    if os.path.isfile(mdPath):
-        with open(mdPath, 'r') as f:
-            md = f.read()
-        print(green + "{0}:\n".format(args.binary) + reset)
-        if args.typ == "all":
-            for typ in types.values():
-                if typ != "all":
-                    mdParsed = yaml.load_all(md)
-                    extract(typ, mdParsed)
+    split = re.sub( r"([A-Z])", r" \1", string).split()
+    newString = ""
+    for i in range(len(split)):
+        if len(split[i]) == 1 and len(split[i-1]) == 1:
+            newString += split[i]
         else:
-            mdParsed = yaml.load_all(md)
-            extract(args.typ, mdParsed)
+            newString += " " + split[i]
+    return newString
+                    
+def extractYml(cat, path):
+    """Extracts details of a specified function of a specified executable of a 
+    specified type from the local copy of LOLBAS
+    """
+    print("    {0}{1}{2}:\n".format(bold, cat, reset))
+    yml = parseYaml(path)
+    indent = "        "
+    results = False
+    for data in yml:
+            if data is not None:
+                for cmd in data['Commands']:
+                    if cmd['Category'] == cat:
+                        results = True
+                        for attr in cmd:
+                            if attr != "Category":
+                                line = "{0}{1}{2}: {3}".format(bold, 
+                                                               splitOnCap(attr),
+                                                               reset, cmd[attr])
+                                subIndent = calcSubIndent(indent, attr, 3)
+                                print(textwrap.fill(line, width=80,
+                                                  initial_indent=indent, 
+                                                  subsequent_indent=subIndent))
+                        print() #Prints newline character
+    if not results:
+        errorNoCatResults()
+    
+def extract(args, path, extractFunc):
+    """Uses a specified extraction function to extract data on a specified
+    executable from specified categories of a specified repo
+    """
+    if args.cat == "all":
+        for cat in repos[args.repo]['cats'].values():
+            if cat != "all":
+                extractFunc(cat, path)
+    else:
+        extractFunc(args.cat, path)
+        
+def errorExeNotFound(args):
+    """Prints exe not found error message"""
+    if args.typ == "all":
+        print(red + "'{0}' was not found in the local copy of ".format(
+              args.executable) + args.repo + reset)
     else:
         print(red + "'{0}' was not found in the local copy of ".format(
-              args.binary) + "GTFOBins" + reset)
+              args.executable) + args.repo + " with type '{0}'".format(
+              repos[args.repo]['types'][args.typ]['name']) + reset)
+    
+def gtfobSearch(args):
+    """Searches local copy of GTFOBins for a specified executable in a 
+    specified category
+    """
+    repCheck(args.repo)
+    exe = args.executable.lower()
+    path = os.path.join(repos[args.repo]['dir'], repos[args.repo]['exeDirs'][0], 
+                        exe + repos[args.repo]['exeFileExt'])
+    if os.path.isfile(path):   
+        print(green + bold + "{0}:\n".format(exe) + reset)
+        extract(args, path, extractMd)
+    else:
+        errorExeNotFound(args)
+        
+def typCheck(args):
+    """Checks if a specified type is valid for a specified repo"""
+    if args.typ.lower() not in repos[args.repo]['types'].keys():
+        sys.exit("Type must be one of {0}".format(
+                                        list(repos[args.repo]['types'].keys())))
+
+def lolbasSearch(args):
+    """Searches local copy of LOLBAS for a specified executable of a specified 
+    type in a specified category
+    """
+    repCheck(args.repo)
+    exe = args.executable.lower()
+    exeSplit = exe.split(".")
+    parts = []
+    if len(exeSplit) > 1:
+        for i in exeSplit:
+            i = parts.append(i.capitalize())
+        exe = ".".join(parts[:-1])
+    else:
+        exe = exe.capitalize()
+    typCheck(args)
+    paths = []
+    if args.typ == "all":
+        for exeDir in repos[args.repo]['exeDirs']:
+            paths.append(os.path.join(repos[args.repo]['dir'], exeDir, exe + 
+                                      repos[args.repo]['exeFileExt']))
+    else:
+        paths.append(os.path.join(repos[args.repo]['dir'],
+ repos[args.repo]['exeDirs'][repos[args.repo]['types'][args.typ]['exeDirsIdx']],
+                     exe + repos[args.repo]['exeFileExt']))
+    for path in paths:
+        if os.path.isfile(path):   
+            try:
+                name = "{0}.{1}".format(exe, parts[-1].lower())
+            except:
+                name = exe
+            parsed = parseYaml(path)
+            for data in parsed:
+                if data is not None and data['Name'] == name:
+                    print(green + bold + "{0}:\n".format(name) + reset)        
+                    extract(args, path, extractYml)
+                    return
+    errorExeNotFound(args)
+    
+def search(args):
+    """Searches local copy of specified repo for a specified executable of a 
+    specified type in a specified category
+    """
+    globals()[repos[args.repo]['searchFunc']](args)
 
 def parseFile(args):
-    """Parses a list of binaries in a supplied file"""
-    with open(args.binary, 'r') as f:
-        bins = f.readlines()
-    for binary in bins:
-        if binary.strip() != "":
-            args.binary = binary.strip()
+    """Parses a list of executables in a supplied file"""
+    with open(args.executable, 'r') as f:
+        exes = f.readlines()
+    for exe in exes:
+        if exe.strip() != "":
+            args.executable = exe.strip()
             search(args)
      
         
