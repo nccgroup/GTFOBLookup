@@ -219,7 +219,7 @@ def purge(args):
     if toPurge:
         for repo in toPurge:
             if os.path.exists(repos[repo]['dir']):
-                shutil.rmtree(repos[repo]['dir'])
+                shutil.rmtree(repos[repo]['dir'], ignore_errors=True)
                 print(green + "Local copy of {0} deleted".format(repo) + reset)
             else:
                 print(red + "Local copy of {0} not found".format(repo) + reset)
