@@ -2,6 +2,7 @@
 
 
 import argparse
+import colorama
 from git import Repo
 import os
 import re
@@ -76,7 +77,6 @@ repos = {"GTFOBins": {
 #Text formatting
 green = "\033[32m"
 red = "\033[31m"
-yellow = "\033[33m"
 bold = "\033[1m"
 reset = "\033[0m"
 
@@ -441,4 +441,6 @@ def parseFile(args):
         
 if __name__ == "__main__":
     args = parseArgs()
+    colorama.init()
     args.func(args)
+    colorama.deinit()
