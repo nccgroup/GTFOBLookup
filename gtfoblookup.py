@@ -91,13 +91,19 @@ def parseArgs():
     parser.set_defaults(func=printUsage, parser=parser)
     subparsers = parser.add_subparsers()
     #Update
-    parserUpdate = subparsers.add_parser('update', help="update local copy " + 
-                                         "of GTFOBins")
+    parserUpdate = subparsers.add_parser('update', help="update local copies " + 
+                                         "of repositories")
     parserUpdate.set_defaults(func=update)
+    parserUpdate.add_argument('-r', '--repo', help="Only update the specified" +
+                              " repository", metavar="repo", action='store', 
+                              dest='repo')
     #Purge
-    parserPurge = subparsers.add_parser('purge', help="remove local copy of " + 
-                                        "GTFOBins")
+    parserPurge = subparsers.add_parser('purge', help="remove local copies of" + 
+                                        " repositories")
     parserPurge.set_defaults(func=purge)
+    parserPurge.add_argument('-r', '--repo', help="Only delete the specified" +
+                              " repository", metavar="repo", action='store', 
+                             dest='repo')
     #Linux
     parserLinux = subparsers.add_parser('linux', help="search the local copy " +
                                         "of GTFOBins")
@@ -166,32 +172,59 @@ def repCheck(repo):
         sys.exit(red + "Local copy of {0} not found, please ".format(repo) + 
                  "update" + reset)
 
+def genReposToChange(args):
+    """Generates a list of repositories to perform an action on"""
+    toChange = []
+    if not args.repo or args.repo == "all":
+        for repo in repos:
+            toChange.append(repo)
+    else:
+        for repo in repos:
+            if repo.lower() == args.repo.lower():
+                toChange.append(repo)
+    return toChange
+
+def errorInvalidRepo():
+    """Prints invalid repository error"""
+    print("Repository must be one of {0}".format(list(repos.keys())))
+        
 def update(args):
     """Updates local copies of GTFOBins and LOLBAS"""
-    for repo in repos:
-        print("Checking {0} for updates...".format(repo))
-        if not os.path.exists(repos[repo]['dir']):
-            print("Local copy of {0} not found, downloading...".format(repo))
-            Repo.clone_from(repos[repo]['url'], repos[repo]['dir'])
-            print(green + "Local copy of {0} downloaded".format(repo) + reset)
-        else:
-            rep = Repo(repos[repo]['dir'])
-            current = rep.head.commit
-            rep.remotes.origin.pull()
-            if current == rep.head.commit:
-                print(green + "Local copy of {0} is up to date".format(repo) + 
+    toUpdate = genReposToChange(args)
+    if toUpdate:
+        for repo in toUpdate:
+            print("Checking {0} for updates...".format(repo))
+            if not os.path.exists(repos[repo]['dir']):
+                print("Local copy of {0} not found, ".format(repo) + 
+                      "downloading...")
+                Repo.clone_from(repos[repo]['url'], repos[repo]['dir'])
+                print(green + "Local copy of {0} downloaded".format(repo) + 
                       reset)
             else:
-                print(green + "Local copy of {0} updated".format(repo) + reset)
+                rep = Repo(repos[repo]['dir'])
+                current = rep.head.commit
+                rep.remotes.origin.pull()
+                if current == rep.head.commit:
+                    print(green + "Local copy of {0} is up to ".format(repo) + 
+                          "date" + reset)
+                else:
+                    print(green + "Local copy of {0} ".format(repo) + 
+                          "updated" + reset)
+    else:
+        errorInvalidRepo()
             
 def purge(args):
     """Removes local copies of GTFOBins and LOLBAS"""
-    for repo in repos:
-        if os.path.exists(repos[repo]['dir']):
-            shutil.rmtree(repos[repo]['dir'])
-            print(green + "Local copy of {0} deleted".format(repo) + reset)
-        else:
-            print(red + "Local copy of {0} not found".format(repo) + reset)
+    toPurge = genReposToChange(args)
+    if toPurge:
+        for repo in toPurge:
+            if os.path.exists(repos[repo]['dir']):
+                shutil.rmtree(repos[repo]['dir'])
+                print(green + "Local copy of {0} deleted".format(repo) + reset)
+            else:
+                print(red + "Local copy of {0} not found".format(repo) + reset)
+    else:
+        errorInvalidRepo()
         
 def parseYaml(path):
     """Parses yaml found in file at given path"""
