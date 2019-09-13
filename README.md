@@ -5,6 +5,7 @@ Offline command line lookup utility for [GTFOBins](https://gtfobins.github.io/) 
 - **.gitignore**: Gitignore file
 - **gtfoblookup.1**: Linux man page for GTFOBLookup
 - **gtfoblookup.py**: GTFOBLookup utility
+- **LICENSE.md**: License file
 - **README.md**: This file
 
 ## Dependencies
