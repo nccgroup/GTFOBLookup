@@ -5,7 +5,7 @@
 
 Developed by James Conlan, James.Conlan@nccgroup.com
 
-https://github.com/JamesConlan96/GTFOBLookup
+https://github.com/nccgroup/GTFOBLookup
 
 You should have received a copy of the GNU General Public License along with 
 GTFOBLookup. If not, see https://www.gnu.org/licenses.
