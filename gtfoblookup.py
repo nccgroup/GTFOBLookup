@@ -78,11 +78,12 @@ repos = {"GTFOBins": {
 green = "\033[32m"
 red = "\033[31m"
 bold = "\033[1m"
+dim = "\033[2m"
 reset = "\033[0m"
 
 
-def parseArgs():
-    """Parses command line arguments"""
+def genParser():
+    """Generates a parser for command line arguments"""
     parser = argparse.ArgumentParser(description="Offline command line lookup" +
                                      " utility for GTFOBins " + 
                                      "(https://gtfobins.github.io/) and " +
@@ -107,37 +108,36 @@ def parseArgs():
     #Linux
     parserLinux = subparsers.add_parser('linux', help="search the local copy " +
                                         "of GTFOBins")
-    parserLinux.set_defaults(func=printUsage, parser=parserLinux, 
+    parserLinux.set_defaults(func=default, parser=parserLinux, 
                              repo="GTFOBins")
     linSubparsers = parserLinux.add_subparsers()
-    #Linux list
-    parserLinList = linSubparsers.add_parser('list', help="list all binaries " +
-                                       "featured in the local copy of " + 
-                                       "GTFOBins")
-    parserLinList.set_defaults(func=listExes)
     #Windows
     parserWindows = subparsers.add_parser('windows', help="search the local " +
                                         "copy of LOLBAS")
-    parserWindows.set_defaults(func=printUsage, parser=parserWindows, 
+    parserWindows.set_defaults(func=default, parser=parserWindows, 
                                repo="LOLBAS")
     winSubparsers = parserWindows.add_subparsers()
-    #Windows list
-    parserWinList = winSubparsers.add_parser('list', help="list all " + 
-                                             "executables featured in the " + 
-                                             "local copy of LOLBAS")
-    parserWinList.set_defaults(func=listExes)
-    #Categories
+    #Common options
     for repo in repos:
+        parentParser = "parser{0}".format(repos[repo]['opSys'].capitalize())
+        #List
+        locals()[parentParser].add_argument('-l', '--list', help="list all" + 
+                                            " types/categories/executables " +
+                                            "featured in the local copy of " +
+                                            "{0}".format(repo), 
+                                            metavar="list", 
+                                            action='store', dest='list')
+        #Categories
+        osAbbr = repos[repo]['opSys'][:3]
+        parentParser = "{0}Subparsers".format(osAbbr)
         for cat in repos[repo]['cats']:
-            parserName = "parser{0}{1}".format(
-                                            repos[repo]['opSys'][:3].capitalize,
-                                            cat.capitalize)
+            parserName = "parser{0}{1}".format(osAbbr.capitalize(),
+                                               cat.capitalize())
             if cat == "all":
                 helptxt = "search all categories of {0}".format(repo)
             else:
                 helptxt = ("search the '{0}".format(repos[repo]['cats'][cat]) +
                            "' category of {0}".format(repo))
-            parentParser = "{0}Subparsers".format(repos[repo]['opSys'][:3])
             vars()[parserName] = locals()[parentParser].add_parser(cat, 
                                                                    help=helptxt)
             vars()[parserName].set_defaults(func=search, 
@@ -160,7 +160,12 @@ def parseArgs():
             vars()[parserName].add_argument('executable', 
                                             help='the executable to search for')
             
-    return parser.parse_args()
+    return parser
+    
+def exit():
+    """Exits the program"""
+    colorama.deinit()
+    sys.exit()
     
 def printUsage(args):
     """Prints parser usage instructions for a given parser"""
@@ -169,8 +174,9 @@ def printUsage(args):
 def repCheck(repo):
     """Exits the program if no local copy of the specified repo is found"""
     if not os.path.exists(repos[repo]['dir']):
-        sys.exit(red + "Local copy of {0} not found, please ".format(repo) + 
-                 "update" + reset)
+        print(red + "Local copy of {0} not found, please ".format(repo) + 
+              "update" + reset)
+        exit()
 
 def genReposToChange(args):
     """Generates a list of repositories to perform an action on"""
@@ -234,7 +240,6 @@ def parseYaml(path):
         
 def listExes(args):
     """Lists the executables featured in the local copy of a repo"""
-    repCheck(args.repo)
     exes = []
     for folder in repos[args.repo]['exeDirs']:
         for file in os.listdir(os.path.join(repos[args.repo]['dir'], folder)):
@@ -243,10 +248,11 @@ def listExes(args):
                     exes.append(file[:-3])
                 elif repos[args.repo]['exeFileExt'] == ".yml":
                     ymlParsed = parseYaml(os.path.join(repos[args.repo]['dir'], 
-                                          folder, file), 'r')
+                                          folder, file))
                     for data in ymlParsed:
                         if data is not None:
                             exes.append(data['Name'])
+    exes.sort(key=str.lower)
     maxLen = len(max(exes, key=len))
     cols = 5
     cols -= maxLen / 20
@@ -260,6 +266,39 @@ def listExes(args):
         for executable in line:
             lineOut += lineFormat.format(executable)
         print(lineOut)
+        
+def listCats(args):
+    """Lists the categories featured in the local copy of a repo"""
+    if repos[args.repo]['cats']:
+        for cat in sorted(list(repos[args.repo]['cats'].keys()), key=str.lower):
+            if cat != "all":
+                print(bold + cat + reset + ": " + repos[args.repo]['cats'][cat])
+    else:
+        print(red + args.repo + " has no categories" + reset)
+    
+def listTypes(args):
+    """Lists the types featured in the local copy of a repo"""
+    if repos[args.repo]['types']:
+        for typ in sorted(list(repos[args.repo]['types'].keys()), 
+                          key=str.lower):
+            if typ != "all":
+                print(bold + typ + reset + ": " + 
+                      repos[args.repo]['types'][typ]['name'])
+    else:
+        print(red + args.repo + " has no types" + reset)
+        
+def lst(args):
+    """Lists categories/types/binaries in a repo"""
+    repCheck(args.repo)
+    if args.list.lower() == "executables":
+        listExes(args)
+    elif args.list.lower() == "categories":
+        listCats(args)
+    elif args.list.lower() == "types":
+        listTypes(args)
+    else:
+        print("Cannot list '{0}'. Valid options are: ".format(args.list) + 
+              "'executables', 'categories', and 'types'")
         
 def errorNoCatResults():
     """Prints no results found for this exe error"""
@@ -288,9 +327,12 @@ def extractMd(cat, path):
                     for func in data['functions'][cat]:
                         for attr in func:
                             lines = func[attr].split("\n")
-                            initLine = "{0}{1}{2}: {3}".format(bold, 
+                            initLine = "{0}{1}{2}: ".format(bold, 
                                                            attr.capitalize(),
-                                                           reset, lines[0])
+                                                           reset)
+                            if attr == "code":
+                                initLine += dim
+                            initLine += lines[0]
                             lines.pop(0)
                             subIndent = calcSubIndent(indent, attr, 2)
                             print(textwrap.fill(initLine, width=80,
@@ -301,7 +343,7 @@ def extractMd(cat, path):
                                     print(textwrap.fill(line, width=80,
                                           initial_indent=subIndent, 
                                           subsequent_indent=subIndent))
-                        print() #Prints newline character
+                        print(reset)
                 except:
                     errorNoCatResults()
                     
@@ -333,9 +375,13 @@ def extractYml(cat, path):
                         results = True
                         for attr in cmd:
                             if attr != "Category":
-                                line = "{0}{1}{2}: {3}".format(bold, 
+                                line = "{0}{1}{2}: ".format(bold, 
                                                                splitOnCap(attr),
-                                                               reset, cmd[attr])
+                                                               reset)
+                                if attr == "Command":
+                                    line += dim
+                                line += cmd[attr]
+                                line += reset
                                 subIndent = calcSubIndent(indent, attr, 3)
                                 print(textwrap.fill(line, width=80,
                                                   initial_indent=indent, 
@@ -374,7 +420,7 @@ def gtfobSearch(args):
     path = os.path.join(repos[args.repo]['dir'], repos[args.repo]['exeDirs'][0], 
                         exe + repos[args.repo]['exeFileExt'])
     if os.path.isfile(path):   
-        print(green + bold + "{0}:\n".format(exe) + reset)
+        print(green + bold + exe + reset + green + ":\n" + reset)
         extract(args, path, extractMd)
     else:
         errorExeNotFound(args)
@@ -382,8 +428,10 @@ def gtfobSearch(args):
 def typCheck(args):
     """Checks if a specified type is valid for a specified repo"""
     if args.typ.lower() not in repos[args.repo]['types'].keys():
-        sys.exit("Type must be one of {0}".format(
-                                        list(repos[args.repo]['types'].keys())))
+        print("Invalid type supplied, run " + dim + "gtfoblookup.py " + 
+              repos[args.repo]['opSys'] + " --list types" + reset + " to see " + 
+              "all valid types")
+        exit()    
 
 def lolbasSearch(args):
     """Searches local copy of LOLBAS for a specified executable of a specified 
@@ -418,7 +466,7 @@ def lolbasSearch(args):
             parsed = parseYaml(path)
             for data in parsed:
                 if data is not None and data['Name'] == name:
-                    print(green + bold + "{0}:\n".format(name) + reset)        
+                    print(green + bold + name + reset + green + ":\n" + reset)        
                     extract(args, path, extractYml)
                     return
     errorExeNotFound(args)
@@ -437,10 +485,16 @@ def parseFile(args):
         if exe.strip() != "":
             args.executable = exe.strip()
             search(args)
-     
+            
+def default(args):
+    """The default function to run if no arguments are specified"""
+    if args.list:
+        lst(args)
+    else:
+        printUsage(args)
         
 if __name__ == "__main__":
-    args = parseArgs()
+    args = genParser().parse_args()
     colorama.init()
     args.func(args)
     colorama.deinit()
