@@ -1,6 +1,17 @@
 #!/usr/bin/python3
 
 
+"""Released as open source by NCC Group Plc - http://www.nccgroup.com/
+
+Developed by James Conlan, James.Conlan@nccgroup.com
+
+https://github.com/JamesConlan96/GTFOBLookup
+
+You should have received a copy of the GNU General Public License along with 
+GTFOBLookup. If not, see https://www.gnu.org/licenses.
+"""
+
+
 import argparse
 import colorama
 from git import Repo
