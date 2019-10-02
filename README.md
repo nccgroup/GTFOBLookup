@@ -24,86 +24,86 @@ gtfoblookup.py [-h] {update,purge,linux,windows} ...
 
 OPTIONS
    Sub-commands
-       argparse-manpage update
+       gtfoblookup.py update
               update local copies of repositories
 
-       argparse-manpage purge
+       gtfoblookup.py purge
               remove local copies of repositories
 
-       argparse-manpage linux
+       gtfoblookup.py linux
               search the local copy of GTFOBins
 
-       argparse-manpage windows
+       gtfoblookup.py windows
               search the local copy of LOLBAS
 
-OPTIONS 'argparse-manpage update'
-       usage: argparse-manpage update [-h] [-r repo]
+OPTIONS 'gtfoblookup.py update'
+       usage: gtfoblookup.py update [-h] [-r repo]
 
        -r repo, --repo repo
               Only update the specified repository
 
-OPTIONS 'argparse-manpage purge'
-       usage: argparse-manpage purge [-h] [-r repo]
+OPTIONS 'gtfoblookup.py purge'
+       usage: gtfoblookup.py purge [-h] [-r repo]
 
        -r repo, --repo repo
               Only delete the specified repository
 
-OPTIONS 'argparse-manpage linux'
-       usage: argparse-manpage linux [-h] [-l list]
+OPTIONS 'gtfoblookup.py linux'
+       usage: gtfoblookup.py linux [-h] [-l list]
                                      {shell,cmd,rev,nrev,bind,nbind,upload,download,write,read,load,suid,sudo,cap,lsuid,all}
                                      ...
 
    Sub-commands
-       argparse-manpage linux shell
+       gtfoblookup.py linux shell
               search the 'shell' category of GTFOBins
 
-       argparse-manpage linux cmd
+       gtfoblookup.py linux cmd
               search the 'command' category of GTFOBins
 
-       argparse-manpage linux rev
+       gtfoblookup.py linux rev
               search the 'reverse-shell' category of GTFOBins
 
-       argparse-manpage linux nrev
+       gtfoblookup.py linux nrev
               search the 'non-interactive-reverse-shell' category of GTFOBins
 
-       argparse-manpage linux bind
+       gtfoblookup.py linux bind
               search the 'bind-shell' category of GTFOBins
 
-       argparse-manpage linux nbind
+       gtfoblookup.py linux nbind
               search the 'non-interactive-bind-shell' category of GTFOBins
 
-       argparse-manpage linux upload
+       gtfoblookup.py linux upload
               search the 'file-upload' category of GTFOBins
 
-       argparse-manpage linux download
+       gtfoblookup.py linux download
               search the 'file-download' category of GTFOBins
 
-       argparse-manpage linux write
+       gtfoblookup.py linux write
               search the 'file-write' category of GTFOBins
 
-       argparse-manpage linux read
+       gtfoblookup.py linux read
               search the 'file-read' category of GTFOBins
 
-       argparse-manpage linux load
+       gtfoblookup.py linux load
               search the 'library-load' category of GTFOBins
 
-       argparse-manpage linux suid
+       gtfoblookup.py linux suid
               search the 'suid' category of GTFOBins
 
-       argparse-manpage linux sudo
+       gtfoblookup.py linux sudo
               search the 'sudo' category of GTFOBins
 
-       argparse-manpage linux cap
+       gtfoblookup.py linux cap
               search the 'capabilities' category of GTFOBins
 
-       argparse-manpage linux lsuid
+       gtfoblookup.py linux lsuid
               search the 'limited-suid' category of GTFOBins
 
-       argparse-manpage linux all
+       gtfoblookup.py linux all
               search all categories of GTFOBins
 
-OPTIONS 'argparse-manpage linux shell'
-       usage: argparse-manpage linux shell [-h] [-f] executable
+OPTIONS 'gtfoblookup.py linux shell'
+       usage: gtfoblookup.py linux shell [-h] [-f] executable
 
        executable
               the executable to search for
@@ -112,8 +112,8 @@ OPTIONS 'argparse-manpage linux shell'
               use a file containing a list of executables (one per line) instead of a single
               executable
 
-OPTIONS 'argparse-manpage linux cmd'
-       usage: argparse-manpage linux cmd [-h] [-f] executable
+OPTIONS 'gtfoblookup.py linux cmd'
+       usage: gtfoblookup.py linux cmd [-h] [-f] executable
 
        executable
               the executable to search for
@@ -122,8 +122,8 @@ OPTIONS 'argparse-manpage linux cmd'
               use a file containing a list of executables (one per line) instead of a single
               executable
 
-OPTIONS 'argparse-manpage linux rev'
-       usage: argparse-manpage linux rev [-h] [-f] executable
+OPTIONS 'gtfoblookup.py linux rev'
+       usage: gtfoblookup.py linux rev [-h] [-f] executable
 
        executable
               the executable to search for
@@ -132,8 +132,8 @@ OPTIONS 'argparse-manpage linux rev'
               use a file containing a list of executables (one per line) instead of a single
               executable
 
-OPTIONS 'argparse-manpage linux nrev'
-       usage: argparse-manpage linux nrev [-h] [-f] executable
+OPTIONS 'gtfoblookup.py linux nrev'
+       usage: gtfoblookup.py linux nrev [-h] [-f] executable
 
        executable
               the executable to search for
@@ -142,8 +142,8 @@ OPTIONS 'argparse-manpage linux nrev'
               use a file containing a list of executables (one per line) instead of a single
               executable
 
-OPTIONS 'argparse-manpage linux bind'
-       usage: argparse-manpage linux bind [-h] [-f] executable
+OPTIONS 'gtfoblookup.py linux bind'
+       usage: gtfoblookup.py linux bind [-h] [-f] executable
 
        executable
               the executable to search for
@@ -152,8 +152,8 @@ OPTIONS 'argparse-manpage linux bind'
               use a file containing a list of executables (one per line) instead of a single
               executable
 
-OPTIONS 'argparse-manpage linux nbind'
-       usage: argparse-manpage linux nbind [-h] [-f] executable
+OPTIONS 'gtfoblookup.py linux nbind'
+       usage: gtfoblookup.py linux nbind [-h] [-f] executable
 
        executable
               the executable to search for
@@ -162,8 +162,8 @@ OPTIONS 'argparse-manpage linux nbind'
               use a file containing a list of executables (one per line) instead of a single
               executable
 
-OPTIONS 'argparse-manpage linux upload'
-       usage: argparse-manpage linux upload [-h] [-f] executable
+OPTIONS 'gtfoblookup.py linux upload'
+       usage: gtfoblookup.py linux upload [-h] [-f] executable
 
        executable
               the executable to search for
@@ -172,8 +172,8 @@ OPTIONS 'argparse-manpage linux upload'
               use a file containing a list of executables (one per line) instead of a single
               executable
 
-OPTIONS 'argparse-manpage linux download'
-       usage: argparse-manpage linux download [-h] [-f] executable
+OPTIONS 'gtfoblookup.py linux download'
+       usage: gtfoblookup.py linux download [-h] [-f] executable
 
        executable
               the executable to search for
@@ -182,8 +182,8 @@ OPTIONS 'argparse-manpage linux download'
               use a file containing a list of executables (one per line) instead of a single
               executable
 
-OPTIONS 'argparse-manpage linux write'
-       usage: argparse-manpage linux write [-h] [-f] executable
+OPTIONS 'gtfoblookup.py linux write'
+       usage: gtfoblookup.py linux write [-h] [-f] executable
 
        executable
               the executable to search for
@@ -192,8 +192,8 @@ OPTIONS 'argparse-manpage linux write'
               use a file containing a list of executables (one per line) instead of a single
               executable
 
-OPTIONS 'argparse-manpage linux read'
-       usage: argparse-manpage linux read [-h] [-f] executable
+OPTIONS 'gtfoblookup.py linux read'
+       usage: gtfoblookup.py linux read [-h] [-f] executable
 
        executable
               the executable to search for
@@ -202,8 +202,8 @@ OPTIONS 'argparse-manpage linux read'
               use a file containing a list of executables (one per line) instead of a single
               executable
 
-OPTIONS 'argparse-manpage linux load'
-       usage: argparse-manpage linux load [-h] [-f] executable
+OPTIONS 'gtfoblookup.py linux load'
+       usage: gtfoblookup.py linux load [-h] [-f] executable
 
        executable
               the executable to search for
@@ -212,8 +212,8 @@ OPTIONS 'argparse-manpage linux load'
               use a file containing a list of executables (one per line) instead of a single
               executable
 
-OPTIONS 'argparse-manpage linux suid'
-       usage: argparse-manpage linux suid [-h] [-f] executable
+OPTIONS 'gtfoblookup.py linux suid'
+       usage: gtfoblookup.py linux suid [-h] [-f] executable
 
        executable
               the executable to search for
@@ -222,8 +222,8 @@ OPTIONS 'argparse-manpage linux suid'
               use a file containing a list of executables (one per line) instead of a single
               executable
 
-OPTIONS 'argparse-manpage linux sudo'
-       usage: argparse-manpage linux sudo [-h] [-f] executable
+OPTIONS 'gtfoblookup.py linux sudo'
+       usage: gtfoblookup.py linux sudo [-h] [-f] executable
 
        executable
               the executable to search for
@@ -232,8 +232,8 @@ OPTIONS 'argparse-manpage linux sudo'
               use a file containing a list of executables (one per line) instead of a single
               executable
 
-OPTIONS 'argparse-manpage linux cap'
-       usage: argparse-manpage linux cap [-h] [-f] executable
+OPTIONS 'gtfoblookup.py linux cap'
+       usage: gtfoblookup.py linux cap [-h] [-f] executable
 
        executable
               the executable to search for
@@ -242,8 +242,8 @@ OPTIONS 'argparse-manpage linux cap'
               use a file containing a list of executables (one per line) instead of a single
               executable
 
-OPTIONS 'argparse-manpage linux lsuid'
-       usage: argparse-manpage linux lsuid [-h] [-f] executable
+OPTIONS 'gtfoblookup.py linux lsuid'
+       usage: gtfoblookup.py linux lsuid [-h] [-f] executable
 
        executable
               the executable to search for
@@ -252,8 +252,8 @@ OPTIONS 'argparse-manpage linux lsuid'
               use a file containing a list of executables (one per line) instead of a single
               executable
 
-OPTIONS 'argparse-manpage linux all'
-       usage: argparse-manpage linux all [-h] [-f] executable
+OPTIONS 'gtfoblookup.py linux all'
+       usage: gtfoblookup.py linux all [-h] [-f] executable
 
        executable
               the executable to search for
@@ -265,56 +265,56 @@ OPTIONS 'argparse-manpage linux all'
        -l list, --list list
               list all types/categories/executables featured in the local copy of GTFOBins
 
-OPTIONS 'argparse-manpage windows'
-       usage: argparse-manpage windows [-h] [-l list]
+OPTIONS 'gtfoblookup.py windows'
+       usage: gtfoblookup.py windows [-h] [-l list]
                                        {ads,awl,comp,copy,creds,decode,download,dump,encode,exec,recon,uac,upload,all}
                                        ...
 
    Sub-commands
-       argparse-manpage windows ads
+       gtfoblookup.py windows ads
               search the 'ADS' category of LOLBAS
 
-       argparse-manpage windows awl
+       gtfoblookup.py windows awl
               search the 'AWL Bypass' category of LOLBAS
 
-       argparse-manpage windows comp
+       gtfoblookup.py windows comp
               search the 'Compile' category of LOLBAS
 
-       argparse-manpage windows copy
+       gtfoblookup.py windows copy
               search the 'Copy' category of LOLBAS
 
-       argparse-manpage windows creds
+       gtfoblookup.py windows creds
               search the 'Credentials' category of LOLBAS
 
-       argparse-manpage windows decode
+       gtfoblookup.py windows decode
               search the 'Decode' category of LOLBAS
 
-       argparse-manpage windows download
+       gtfoblookup.py windows download
               search the 'Download' category of LOLBAS
 
-       argparse-manpage windows dump
+       gtfoblookup.py windows dump
               search the 'Dump' category of LOLBAS
 
-       argparse-manpage windows encode
+       gtfoblookup.py windows encode
               search the 'Encode' category of LOLBAS
 
-       argparse-manpage windows exec
+       gtfoblookup.py windows exec
               search the 'Execute' category of LOLBAS
 
-       argparse-manpage windows recon
+       gtfoblookup.py windows recon
               search the 'Reconnaissance' category of LOLBAS
 
-       argparse-manpage windows uac
+       gtfoblookup.py windows uac
               search the 'UAC Bypass' category of LOLBAS
 
-       argparse-manpage windows upload
+       gtfoblookup.py windows upload
               search the 'Upload' category of LOLBAS
 
-       argparse-manpage windows all
+       gtfoblookup.py windows all
               search all categories of LOLBAS
 
-OPTIONS 'argparse-manpage windows ads'
-       usage: argparse-manpage windows ads [-h] [-f] [-t type] executable
+OPTIONS 'gtfoblookup.py windows ads'
+       usage: gtfoblookup.py windows ads [-h] [-f] [-t type] executable
 
        executable
               the executable to search for
@@ -326,8 +326,8 @@ OPTIONS 'argparse-manpage windows ads'
        -t type, --type type
               search for a specific type of executable
 
-OPTIONS 'argparse-manpage windows awl'
-       usage: argparse-manpage windows awl [-h] [-f] [-t type] executable
+OPTIONS 'gtfoblookup.py windows awl'
+       usage: gtfoblookup.py windows awl [-h] [-f] [-t type] executable
 
        executable
               the executable to search for
@@ -339,8 +339,8 @@ OPTIONS 'argparse-manpage windows awl'
        -t type, --type type
               search for a specific type of executable
 
-OPTIONS 'argparse-manpage windows comp'
-       usage: argparse-manpage windows comp [-h] [-f] [-t type] executable
+OPTIONS 'gtfoblookup.py windows comp'
+       usage: gtfoblookup.py windows comp [-h] [-f] [-t type] executable
 
        executable
               the executable to search for
@@ -352,8 +352,8 @@ OPTIONS 'argparse-manpage windows comp'
        -t type, --type type
               search for a specific type of executable
 
-OPTIONS 'argparse-manpage windows copy'
-       usage: argparse-manpage windows copy [-h] [-f] [-t type] executable
+OPTIONS 'gtfoblookup.py windows copy'
+       usage: gtfoblookup.py windows copy [-h] [-f] [-t type] executable
 
        executable
               the executable to search for
@@ -365,8 +365,8 @@ OPTIONS 'argparse-manpage windows copy'
        -t type, --type type
               search for a specific type of executable
 
-OPTIONS 'argparse-manpage windows creds'
-       usage: argparse-manpage windows creds [-h] [-f] [-t type] executable
+OPTIONS 'gtfoblookup.py windows creds'
+       usage: gtfoblookup.py windows creds [-h] [-f] [-t type] executable
 
        executable
               the executable to search for
@@ -378,8 +378,8 @@ OPTIONS 'argparse-manpage windows creds'
        -t type, --type type
               search for a specific type of executable
 
-OPTIONS 'argparse-manpage windows decode'
-       usage: argparse-manpage windows decode [-h] [-f] [-t type] executable
+OPTIONS 'gtfoblookup.py windows decode'
+       usage: gtfoblookup.py windows decode [-h] [-f] [-t type] executable
 
        executable
               the executable to search for
@@ -391,8 +391,8 @@ OPTIONS 'argparse-manpage windows decode'
        -t type, --type type
               search for a specific type of executable
 
-OPTIONS 'argparse-manpage windows download'
-       usage: argparse-manpage windows download [-h] [-f] [-t type] executable
+OPTIONS 'gtfoblookup.py windows download'
+       usage: gtfoblookup.py windows download [-h] [-f] [-t type] executable
 
        executable
               the executable to search for
@@ -404,8 +404,8 @@ OPTIONS 'argparse-manpage windows download'
        -t type, --type type
               search for a specific type of executable
 
-OPTIONS 'argparse-manpage windows dump'
-       usage: argparse-manpage windows dump [-h] [-f] [-t type] executable
+OPTIONS 'gtfoblookup.py windows dump'
+       usage: gtfoblookup.py windows dump [-h] [-f] [-t type] executable
 
        executable
               the executable to search for
@@ -417,8 +417,8 @@ OPTIONS 'argparse-manpage windows dump'
        -t type, --type type
               search for a specific type of executable
 
-OPTIONS 'argparse-manpage windows encode'
-       usage: argparse-manpage windows encode [-h] [-f] [-t type] executable
+OPTIONS 'gtfoblookup.py windows encode'
+       usage: gtfoblookup.py windows encode [-h] [-f] [-t type] executable
 
        executable
               the executable to search for
@@ -430,8 +430,8 @@ OPTIONS 'argparse-manpage windows encode'
        -t type, --type type
               search for a specific type of executable
 
-OPTIONS 'argparse-manpage windows exec'
-       usage: argparse-manpage windows exec [-h] [-f] [-t type] executable
+OPTIONS 'gtfoblookup.py windows exec'
+       usage: gtfoblookup.py windows exec [-h] [-f] [-t type] executable
 
        executable
               the executable to search for
@@ -443,8 +443,8 @@ OPTIONS 'argparse-manpage windows exec'
        -t type, --type type
               search for a specific type of executable
 
-OPTIONS 'argparse-manpage windows recon'
-       usage: argparse-manpage windows recon [-h] [-f] [-t type] executable
+OPTIONS 'gtfoblookup.py windows recon'
+       usage: gtfoblookup.py windows recon [-h] [-f] [-t type] executable
 
        executable
               the executable to search for
@@ -456,8 +456,8 @@ OPTIONS 'argparse-manpage windows recon'
        -t type, --type type
               search for a specific type of executable
 
-OPTIONS 'argparse-manpage windows uac'
-       usage: argparse-manpage windows uac [-h] [-f] [-t type] executable
+OPTIONS 'gtfoblookup.py windows uac'
+       usage: gtfoblookup.py windows uac [-h] [-f] [-t type] executable
 
        executable
               the executable to search for
@@ -469,8 +469,8 @@ OPTIONS 'argparse-manpage windows uac'
        -t type, --type type
               search for a specific type of executable
 
-OPTIONS 'argparse-manpage windows upload'
-       usage: argparse-manpage windows upload [-h] [-f] [-t type] executable
+OPTIONS 'gtfoblookup.py windows upload'
+       usage: gtfoblookup.py windows upload [-h] [-f] [-t type] executable
 
        executable
               the executable to search for
@@ -482,8 +482,8 @@ OPTIONS 'argparse-manpage windows upload'
        -t type, --type type
               search for a specific type of executable
 
-OPTIONS 'argparse-manpage windows all'
-       usage: argparse-manpage windows all [-h] [-f] [-t type] executable
+OPTIONS 'gtfoblookup.py windows all'
+       usage: gtfoblookup.py windows all [-h] [-f] [-t type] executable
 
        executable
               the executable to search for

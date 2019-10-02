@@ -1,8 +1,8 @@
-.TH argparse-manpage "1" Manual
+.TH gtfoblookup.py "1" Manual
 .SH NAME
-argparse-manpage
+gtfoblookup.py
 .SH SYNOPSIS
-.B argparse-manpage
+.B gtfoblookup.py
 [-h] {update,purge,linux,windows} ...
 .SH DESCRIPTION
 Offline command line lookup utility for GTFOBins (https://gtfobins.github.io/)
@@ -12,90 +12,90 @@ and LOLBAS (https://lolbas\-project.github.io/)
 .SS
 \fBSub-commands\fR
 .TP
-\fBargparse-manpage\fR \fI\,update\/\fR
+\fBgtfoblookup.py\fR \fI\,update\/\fR
 update local copies of repositories
 .TP
-\fBargparse-manpage\fR \fI\,purge\/\fR
+\fBgtfoblookup.py\fR \fI\,purge\/\fR
 remove local copies of repositories
 .TP
-\fBargparse-manpage\fR \fI\,linux\/\fR
+\fBgtfoblookup.py\fR \fI\,linux\/\fR
 search the local copy of GTFOBins
 .TP
-\fBargparse-manpage\fR \fI\,windows\/\fR
+\fBgtfoblookup.py\fR \fI\,windows\/\fR
 search the local copy of LOLBAS
-.SH OPTIONS 'argparse-manpage update'
-usage: argparse-manpage update [-h] [-r repo]
+.SH OPTIONS 'gtfoblookup.py update'
+usage: gtfoblookup.py update [-h] [-r repo]
 
 
 .TP
 \fB\-r\fR repo, \fB\-\-repo\fR repo
 Only update the specified repository
 
-.SH OPTIONS 'argparse-manpage purge'
-usage: argparse-manpage purge [-h] [-r repo]
+.SH OPTIONS 'gtfoblookup.py purge'
+usage: gtfoblookup.py purge [-h] [-r repo]
 
 
 .TP
 \fB\-r\fR repo, \fB\-\-repo\fR repo
 Only delete the specified repository
 
-.SH OPTIONS 'argparse-manpage linux'
-usage: argparse-manpage linux [-h] [-l list]
+.SH OPTIONS 'gtfoblookup.py linux'
+usage: gtfoblookup.py linux [-h] [-l list]
                               {shell,cmd,rev,nrev,bind,nbind,upload,download,write,read,load,suid,sudo,cap,lsuid,all}
                               ...
 
 .SS
 \fBSub-commands\fR
 .TP
-\fBargparse-manpage linux\fR \fI\,shell\/\fR
+\fBgtfoblookup.py linux\fR \fI\,shell\/\fR
 search the 'shell' category of GTFOBins
 .TP
-\fBargparse-manpage linux\fR \fI\,cmd\/\fR
+\fBgtfoblookup.py linux\fR \fI\,cmd\/\fR
 search the 'command' category of GTFOBins
 .TP
-\fBargparse-manpage linux\fR \fI\,rev\/\fR
+\fBgtfoblookup.py linux\fR \fI\,rev\/\fR
 search the 'reverse-shell' category of GTFOBins
 .TP
-\fBargparse-manpage linux\fR \fI\,nrev\/\fR
+\fBgtfoblookup.py linux\fR \fI\,nrev\/\fR
 search the 'non-interactive-reverse-shell' category of GTFOBins
 .TP
-\fBargparse-manpage linux\fR \fI\,bind\/\fR
+\fBgtfoblookup.py linux\fR \fI\,bind\/\fR
 search the 'bind-shell' category of GTFOBins
 .TP
-\fBargparse-manpage linux\fR \fI\,nbind\/\fR
+\fBgtfoblookup.py linux\fR \fI\,nbind\/\fR
 search the 'non-interactive-bind-shell' category of GTFOBins
 .TP
-\fBargparse-manpage linux\fR \fI\,upload\/\fR
+\fBgtfoblookup.py linux\fR \fI\,upload\/\fR
 search the 'file-upload' category of GTFOBins
 .TP
-\fBargparse-manpage linux\fR \fI\,download\/\fR
+\fBgtfoblookup.py linux\fR \fI\,download\/\fR
 search the 'file-download' category of GTFOBins
 .TP
-\fBargparse-manpage linux\fR \fI\,write\/\fR
+\fBgtfoblookup.py linux\fR \fI\,write\/\fR
 search the 'file-write' category of GTFOBins
 .TP
-\fBargparse-manpage linux\fR \fI\,read\/\fR
+\fBgtfoblookup.py linux\fR \fI\,read\/\fR
 search the 'file-read' category of GTFOBins
 .TP
-\fBargparse-manpage linux\fR \fI\,load\/\fR
+\fBgtfoblookup.py linux\fR \fI\,load\/\fR
 search the 'library-load' category of GTFOBins
 .TP
-\fBargparse-manpage linux\fR \fI\,suid\/\fR
+\fBgtfoblookup.py linux\fR \fI\,suid\/\fR
 search the 'suid' category of GTFOBins
 .TP
-\fBargparse-manpage linux\fR \fI\,sudo\/\fR
+\fBgtfoblookup.py linux\fR \fI\,sudo\/\fR
 search the 'sudo' category of GTFOBins
 .TP
-\fBargparse-manpage linux\fR \fI\,cap\/\fR
+\fBgtfoblookup.py linux\fR \fI\,cap\/\fR
 search the 'capabilities' category of GTFOBins
 .TP
-\fBargparse-manpage linux\fR \fI\,lsuid\/\fR
+\fBgtfoblookup.py linux\fR \fI\,lsuid\/\fR
 search the 'limited-suid' category of GTFOBins
 .TP
-\fBargparse-manpage linux\fR \fI\,all\/\fR
+\fBgtfoblookup.py linux\fR \fI\,all\/\fR
 search all categories of GTFOBins
-.SH OPTIONS 'argparse-manpage linux shell'
-usage: argparse-manpage linux shell [-h] [-f] executable
+.SH OPTIONS 'gtfoblookup.py linux shell'
+usage: gtfoblookup.py linux shell [-h] [-f] executable
 
 .TP
 \fBexecutable\fR
@@ -107,8 +107,8 @@ use a file containing a list of executables (one per line) instead of a single
 .br
 executable
 
-.SH OPTIONS 'argparse-manpage linux cmd'
-usage: argparse-manpage linux cmd [-h] [-f] executable
+.SH OPTIONS 'gtfoblookup.py linux cmd'
+usage: gtfoblookup.py linux cmd [-h] [-f] executable
 
 .TP
 \fBexecutable\fR
@@ -120,8 +120,8 @@ use a file containing a list of executables (one per line) instead of a single
 .br
 executable
 
-.SH OPTIONS 'argparse-manpage linux rev'
-usage: argparse-manpage linux rev [-h] [-f] executable
+.SH OPTIONS 'gtfoblookup.py linux rev'
+usage: gtfoblookup.py linux rev [-h] [-f] executable
 
 .TP
 \fBexecutable\fR
@@ -133,8 +133,8 @@ use a file containing a list of executables (one per line) instead of a single
 .br
 executable
 
-.SH OPTIONS 'argparse-manpage linux nrev'
-usage: argparse-manpage linux nrev [-h] [-f] executable
+.SH OPTIONS 'gtfoblookup.py linux nrev'
+usage: gtfoblookup.py linux nrev [-h] [-f] executable
 
 .TP
 \fBexecutable\fR
@@ -146,8 +146,8 @@ use a file containing a list of executables (one per line) instead of a single
 .br
 executable
 
-.SH OPTIONS 'argparse-manpage linux bind'
-usage: argparse-manpage linux bind [-h] [-f] executable
+.SH OPTIONS 'gtfoblookup.py linux bind'
+usage: gtfoblookup.py linux bind [-h] [-f] executable
 
 .TP
 \fBexecutable\fR
@@ -159,8 +159,8 @@ use a file containing a list of executables (one per line) instead of a single
 .br
 executable
 
-.SH OPTIONS 'argparse-manpage linux nbind'
-usage: argparse-manpage linux nbind [-h] [-f] executable
+.SH OPTIONS 'gtfoblookup.py linux nbind'
+usage: gtfoblookup.py linux nbind [-h] [-f] executable
 
 .TP
 \fBexecutable\fR
@@ -172,8 +172,8 @@ use a file containing a list of executables (one per line) instead of a single
 .br
 executable
 
-.SH OPTIONS 'argparse-manpage linux upload'
-usage: argparse-manpage linux upload [-h] [-f] executable
+.SH OPTIONS 'gtfoblookup.py linux upload'
+usage: gtfoblookup.py linux upload [-h] [-f] executable
 
 .TP
 \fBexecutable\fR
@@ -185,8 +185,8 @@ use a file containing a list of executables (one per line) instead of a single
 .br
 executable
 
-.SH OPTIONS 'argparse-manpage linux download'
-usage: argparse-manpage linux download [-h] [-f] executable
+.SH OPTIONS 'gtfoblookup.py linux download'
+usage: gtfoblookup.py linux download [-h] [-f] executable
 
 .TP
 \fBexecutable\fR
@@ -198,8 +198,8 @@ use a file containing a list of executables (one per line) instead of a single
 .br
 executable
 
-.SH OPTIONS 'argparse-manpage linux write'
-usage: argparse-manpage linux write [-h] [-f] executable
+.SH OPTIONS 'gtfoblookup.py linux write'
+usage: gtfoblookup.py linux write [-h] [-f] executable
 
 .TP
 \fBexecutable\fR
@@ -211,8 +211,8 @@ use a file containing a list of executables (one per line) instead of a single
 .br
 executable
 
-.SH OPTIONS 'argparse-manpage linux read'
-usage: argparse-manpage linux read [-h] [-f] executable
+.SH OPTIONS 'gtfoblookup.py linux read'
+usage: gtfoblookup.py linux read [-h] [-f] executable
 
 .TP
 \fBexecutable\fR
@@ -224,8 +224,8 @@ use a file containing a list of executables (one per line) instead of a single
 .br
 executable
 
-.SH OPTIONS 'argparse-manpage linux load'
-usage: argparse-manpage linux load [-h] [-f] executable
+.SH OPTIONS 'gtfoblookup.py linux load'
+usage: gtfoblookup.py linux load [-h] [-f] executable
 
 .TP
 \fBexecutable\fR
@@ -237,8 +237,8 @@ use a file containing a list of executables (one per line) instead of a single
 .br
 executable
 
-.SH OPTIONS 'argparse-manpage linux suid'
-usage: argparse-manpage linux suid [-h] [-f] executable
+.SH OPTIONS 'gtfoblookup.py linux suid'
+usage: gtfoblookup.py linux suid [-h] [-f] executable
 
 .TP
 \fBexecutable\fR
@@ -250,8 +250,8 @@ use a file containing a list of executables (one per line) instead of a single
 .br
 executable
 
-.SH OPTIONS 'argparse-manpage linux sudo'
-usage: argparse-manpage linux sudo [-h] [-f] executable
+.SH OPTIONS 'gtfoblookup.py linux sudo'
+usage: gtfoblookup.py linux sudo [-h] [-f] executable
 
 .TP
 \fBexecutable\fR
@@ -263,8 +263,8 @@ use a file containing a list of executables (one per line) instead of a single
 .br
 executable
 
-.SH OPTIONS 'argparse-manpage linux cap'
-usage: argparse-manpage linux cap [-h] [-f] executable
+.SH OPTIONS 'gtfoblookup.py linux cap'
+usage: gtfoblookup.py linux cap [-h] [-f] executable
 
 .TP
 \fBexecutable\fR
@@ -276,8 +276,8 @@ use a file containing a list of executables (one per line) instead of a single
 .br
 executable
 
-.SH OPTIONS 'argparse-manpage linux lsuid'
-usage: argparse-manpage linux lsuid [-h] [-f] executable
+.SH OPTIONS 'gtfoblookup.py linux lsuid'
+usage: gtfoblookup.py linux lsuid [-h] [-f] executable
 
 .TP
 \fBexecutable\fR
@@ -289,8 +289,8 @@ use a file containing a list of executables (one per line) instead of a single
 .br
 executable
 
-.SH OPTIONS 'argparse-manpage linux all'
-usage: argparse-manpage linux all [-h] [-f] executable
+.SH OPTIONS 'gtfoblookup.py linux all'
+usage: gtfoblookup.py linux all [-h] [-f] executable
 
 .TP
 \fBexecutable\fR
@@ -306,57 +306,57 @@ executable
 \fB\-l\fR list, \fB\-\-list\fR list
 list all types/categories/executables featured in the local copy of GTFOBins
 
-.SH OPTIONS 'argparse-manpage windows'
-usage: argparse-manpage windows [-h] [-l list]
+.SH OPTIONS 'gtfoblookup.py windows'
+usage: gtfoblookup.py windows [-h] [-l list]
                                 {ads,awl,comp,copy,creds,decode,download,dump,encode,exec,recon,uac,upload,all}
                                 ...
 
 .SS
 \fBSub-commands\fR
 .TP
-\fBargparse-manpage windows\fR \fI\,ads\/\fR
+\fBgtfoblookup.py windows\fR \fI\,ads\/\fR
 search the 'ADS' category of LOLBAS
 .TP
-\fBargparse-manpage windows\fR \fI\,awl\/\fR
+\fBgtfoblookup.py windows\fR \fI\,awl\/\fR
 search the 'AWL Bypass' category of LOLBAS
 .TP
-\fBargparse-manpage windows\fR \fI\,comp\/\fR
+\fBgtfoblookup.py windows\fR \fI\,comp\/\fR
 search the 'Compile' category of LOLBAS
 .TP
-\fBargparse-manpage windows\fR \fI\,copy\/\fR
+\fBgtfoblookup.py windows\fR \fI\,copy\/\fR
 search the 'Copy' category of LOLBAS
 .TP
-\fBargparse-manpage windows\fR \fI\,creds\/\fR
+\fBgtfoblookup.py windows\fR \fI\,creds\/\fR
 search the 'Credentials' category of LOLBAS
 .TP
-\fBargparse-manpage windows\fR \fI\,decode\/\fR
+\fBgtfoblookup.py windows\fR \fI\,decode\/\fR
 search the 'Decode' category of LOLBAS
 .TP
-\fBargparse-manpage windows\fR \fI\,download\/\fR
+\fBgtfoblookup.py windows\fR \fI\,download\/\fR
 search the 'Download' category of LOLBAS
 .TP
-\fBargparse-manpage windows\fR \fI\,dump\/\fR
+\fBgtfoblookup.py windows\fR \fI\,dump\/\fR
 search the 'Dump' category of LOLBAS
 .TP
-\fBargparse-manpage windows\fR \fI\,encode\/\fR
+\fBgtfoblookup.py windows\fR \fI\,encode\/\fR
 search the 'Encode' category of LOLBAS
 .TP
-\fBargparse-manpage windows\fR \fI\,exec\/\fR
+\fBgtfoblookup.py windows\fR \fI\,exec\/\fR
 search the 'Execute' category of LOLBAS
 .TP
-\fBargparse-manpage windows\fR \fI\,recon\/\fR
+\fBgtfoblookup.py windows\fR \fI\,recon\/\fR
 search the 'Reconnaissance' category of LOLBAS
 .TP
-\fBargparse-manpage windows\fR \fI\,uac\/\fR
+\fBgtfoblookup.py windows\fR \fI\,uac\/\fR
 search the 'UAC Bypass' category of LOLBAS
 .TP
-\fBargparse-manpage windows\fR \fI\,upload\/\fR
+\fBgtfoblookup.py windows\fR \fI\,upload\/\fR
 search the 'Upload' category of LOLBAS
 .TP
-\fBargparse-manpage windows\fR \fI\,all\/\fR
+\fBgtfoblookup.py windows\fR \fI\,all\/\fR
 search all categories of LOLBAS
-.SH OPTIONS 'argparse-manpage windows ads'
-usage: argparse-manpage windows ads [-h] [-f] [-t type] executable
+.SH OPTIONS 'gtfoblookup.py windows ads'
+usage: gtfoblookup.py windows ads [-h] [-f] [-t type] executable
 
 .TP
 \fBexecutable\fR
@@ -372,8 +372,8 @@ executable
 \fB\-t\fR type, \fB\-\-type\fR type
 search for a specific type of executable
 
-.SH OPTIONS 'argparse-manpage windows awl'
-usage: argparse-manpage windows awl [-h] [-f] [-t type] executable
+.SH OPTIONS 'gtfoblookup.py windows awl'
+usage: gtfoblookup.py windows awl [-h] [-f] [-t type] executable
 
 .TP
 \fBexecutable\fR
@@ -389,8 +389,8 @@ executable
 \fB\-t\fR type, \fB\-\-type\fR type
 search for a specific type of executable
 
-.SH OPTIONS 'argparse-manpage windows comp'
-usage: argparse-manpage windows comp [-h] [-f] [-t type] executable
+.SH OPTIONS 'gtfoblookup.py windows comp'
+usage: gtfoblookup.py windows comp [-h] [-f] [-t type] executable
 
 .TP
 \fBexecutable\fR
@@ -406,8 +406,8 @@ executable
 \fB\-t\fR type, \fB\-\-type\fR type
 search for a specific type of executable
 
-.SH OPTIONS 'argparse-manpage windows copy'
-usage: argparse-manpage windows copy [-h] [-f] [-t type] executable
+.SH OPTIONS 'gtfoblookup.py windows copy'
+usage: gtfoblookup.py windows copy [-h] [-f] [-t type] executable
 
 .TP
 \fBexecutable\fR
@@ -423,8 +423,8 @@ executable
 \fB\-t\fR type, \fB\-\-type\fR type
 search for a specific type of executable
 
-.SH OPTIONS 'argparse-manpage windows creds'
-usage: argparse-manpage windows creds [-h] [-f] [-t type] executable
+.SH OPTIONS 'gtfoblookup.py windows creds'
+usage: gtfoblookup.py windows creds [-h] [-f] [-t type] executable
 
 .TP
 \fBexecutable\fR
@@ -440,8 +440,8 @@ executable
 \fB\-t\fR type, \fB\-\-type\fR type
 search for a specific type of executable
 
-.SH OPTIONS 'argparse-manpage windows decode'
-usage: argparse-manpage windows decode [-h] [-f] [-t type] executable
+.SH OPTIONS 'gtfoblookup.py windows decode'
+usage: gtfoblookup.py windows decode [-h] [-f] [-t type] executable
 
 .TP
 \fBexecutable\fR
@@ -457,8 +457,8 @@ executable
 \fB\-t\fR type, \fB\-\-type\fR type
 search for a specific type of executable
 
-.SH OPTIONS 'argparse-manpage windows download'
-usage: argparse-manpage windows download [-h] [-f] [-t type] executable
+.SH OPTIONS 'gtfoblookup.py windows download'
+usage: gtfoblookup.py windows download [-h] [-f] [-t type] executable
 
 .TP
 \fBexecutable\fR
@@ -474,8 +474,8 @@ executable
 \fB\-t\fR type, \fB\-\-type\fR type
 search for a specific type of executable
 
-.SH OPTIONS 'argparse-manpage windows dump'
-usage: argparse-manpage windows dump [-h] [-f] [-t type] executable
+.SH OPTIONS 'gtfoblookup.py windows dump'
+usage: gtfoblookup.py windows dump [-h] [-f] [-t type] executable
 
 .TP
 \fBexecutable\fR
@@ -491,8 +491,8 @@ executable
 \fB\-t\fR type, \fB\-\-type\fR type
 search for a specific type of executable
 
-.SH OPTIONS 'argparse-manpage windows encode'
-usage: argparse-manpage windows encode [-h] [-f] [-t type] executable
+.SH OPTIONS 'gtfoblookup.py windows encode'
+usage: gtfoblookup.py windows encode [-h] [-f] [-t type] executable
 
 .TP
 \fBexecutable\fR
@@ -508,8 +508,8 @@ executable
 \fB\-t\fR type, \fB\-\-type\fR type
 search for a specific type of executable
 
-.SH OPTIONS 'argparse-manpage windows exec'
-usage: argparse-manpage windows exec [-h] [-f] [-t type] executable
+.SH OPTIONS 'gtfoblookup.py windows exec'
+usage: gtfoblookup.py windows exec [-h] [-f] [-t type] executable
 
 .TP
 \fBexecutable\fR
@@ -525,8 +525,8 @@ executable
 \fB\-t\fR type, \fB\-\-type\fR type
 search for a specific type of executable
 
-.SH OPTIONS 'argparse-manpage windows recon'
-usage: argparse-manpage windows recon [-h] [-f] [-t type] executable
+.SH OPTIONS 'gtfoblookup.py windows recon'
+usage: gtfoblookup.py windows recon [-h] [-f] [-t type] executable
 
 .TP
 \fBexecutable\fR
@@ -542,8 +542,8 @@ executable
 \fB\-t\fR type, \fB\-\-type\fR type
 search for a specific type of executable
 
-.SH OPTIONS 'argparse-manpage windows uac'
-usage: argparse-manpage windows uac [-h] [-f] [-t type] executable
+.SH OPTIONS 'gtfoblookup.py windows uac'
+usage: gtfoblookup.py windows uac [-h] [-f] [-t type] executable
 
 .TP
 \fBexecutable\fR
@@ -559,8 +559,8 @@ executable
 \fB\-t\fR type, \fB\-\-type\fR type
 search for a specific type of executable
 
-.SH OPTIONS 'argparse-manpage windows upload'
-usage: argparse-manpage windows upload [-h] [-f] [-t type] executable
+.SH OPTIONS 'gtfoblookup.py windows upload'
+usage: gtfoblookup.py windows upload [-h] [-f] [-t type] executable
 
 .TP
 \fBexecutable\fR
@@ -576,8 +576,8 @@ executable
 \fB\-t\fR type, \fB\-\-type\fR type
 search for a specific type of executable
 
-.SH OPTIONS 'argparse-manpage windows all'
-usage: argparse-manpage windows all [-h] [-f] [-t type] executable
+.SH OPTIONS 'gtfoblookup.py windows all'
+usage: gtfoblookup.py windows all [-h] [-f] [-t type] executable
 
 .TP
 \fBexecutable\fR
@@ -602,5 +602,5 @@ list all types/categories/executables featured in the local copy of LOLBAS
 was written by James Conlan <James.Conlan@nccgroup.com>.
 .SH DISTRIBUTION
 The latest version of GTFOBLookup may be downloaded from
-.UR https://github.com/JamesConlan96/GTFOBLookup
+.UR https://github.com/nccgroup/GTFOBLookup
 .UE
