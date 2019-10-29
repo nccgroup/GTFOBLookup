@@ -247,7 +247,7 @@ def parseYaml(path):
     """Parses yaml found in file at given path"""
     with open(path) as f:
         yml = f.read()
-    return yaml.load_all(yml)
+    return yaml.load_all(yml, Loader=yaml.FullLoader)
         
 def listExes(args):
     """Lists the executables featured in the local copy of a repo"""
