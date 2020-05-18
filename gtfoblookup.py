@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
 
 """Released as open source by NCC Group Plc - http://www.nccgroup.com/
