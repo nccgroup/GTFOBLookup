@@ -23,11 +23,13 @@ import textwrap
 import yaml
 
 
+XDG_CACHE_HOME = os.getenv(
+    "XDG_CACHE_HOME", default=os.path.join(os.environ["HOME"], ".cache")
+)
+
 repos = {"GTFOBins": {
                     "url": "https://github.com/GTFOBins/GTFOBins.github.io.git",
-                    "dir": os.path.join(os.path.dirname(
-                                                     os.path.abspath(__file__)), 
-                                                     "GTFOBins.github.io"),
+                    "dir": os.path.join(XDG_CACHE_HOME, "gtfoblookup", "GTFOBins.github.io"),
                     "exeDirs": ["_gtfobins"],
                     "exeFileExt": ".md",
                     "opSys": "linux",
@@ -52,9 +54,7 @@ repos = {"GTFOBins": {
                     "searchFunc": "gtfobSearch"
                     },
          "LOLBAS": {"url": "https://github.com/LOLBAS-Project/LOLBAS.git", 
-                    "dir": os.path.join(os.path.dirname(
-                                                     os.path.abspath(__file__)), 
-                                                     "LOLBAS"),
+                    "dir": os.path.join(XDG_CACHE_HOME, "gtfoblookup", "LOLBAS"),
                     "exeDirs": ["yml/OSBinaries", "yml/OSLibraries", 
                                 "yml/OSScripts", "yml/OtherMSBinaries"],
                     "exeFileExt": ".yml",
