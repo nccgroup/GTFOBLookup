@@ -10,6 +10,7 @@ Offline command line lookup utility for [GTFOBins](https://gtfobins.github.io/) 
 
 ## Dependencies
 GTFOBLookup requires the following non-standard Python libraries to be installed:
+- appdirs (`pip3 install appdirs`)
 - colorama (`pip3 install colorama`)
 - git (`pip3 install gitpython`)
 - yaml (`pip3 install pyyaml`)

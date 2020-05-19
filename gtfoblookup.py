@@ -13,6 +13,7 @@ GTFOBLookup. If not, see https://www.gnu.org/licenses.
 
 
 import argparse
+from appdirs import user_cache_dir
 import colorama
 from git import Repo
 import os
@@ -22,12 +23,11 @@ import sys
 import textwrap
 import yaml
 
+repodir = user_cache_dir("GTFOBLookup", "NCC Group")
 
 repos = {"GTFOBins": {
                     "url": "https://github.com/GTFOBins/GTFOBins.github.io.git",
-                    "dir": os.path.join(os.path.dirname(
-                                                     os.path.abspath(__file__)), 
-                                                     "GTFOBins.github.io"),
+                    "dir": os.path.join(repodir, "GTFOBins.github.io"),
                     "exeDirs": ["_gtfobins"],
                     "exeFileExt": ".md",
                     "opSys": "linux",
@@ -52,9 +52,7 @@ repos = {"GTFOBins": {
                     "searchFunc": "gtfobSearch"
                     },
          "LOLBAS": {"url": "https://github.com/LOLBAS-Project/LOLBAS.git", 
-                    "dir": os.path.join(os.path.dirname(
-                                                     os.path.abspath(__file__)), 
-                                                     "LOLBAS"),
+                    "dir": os.path.join(repodir, "LOLBAS"),
                     "exeDirs": ["yml/OSBinaries", "yml/OSLibraries", 
                                 "yml/OSScripts", "yml/OtherMSBinaries"],
                     "exeFileExt": ".yml",
