@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
 
 """Released as open source by NCC Group Plc - http://www.nccgroup.com/
@@ -22,6 +22,7 @@ import shutil
 import sys
 import textwrap
 import yaml
+
 
 repodir = user_cache_dir("GTFOBLookup", "NCC Group")
 
@@ -503,6 +504,10 @@ def default(args):
         printUsage(args)
         
 if __name__ == "__main__":
+    if sys.version_info[0] < 3:
+	    print(red + "Some functionality only works with Python3. Please " + 
+			  "switch to using Python3 to make the most of GTFOBLookup." + 
+			  reset)
     args = genParser().parse_args()
     colorama.init()
     args.func(args)
