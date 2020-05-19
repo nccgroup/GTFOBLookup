@@ -7,6 +7,7 @@ Offline command line lookup utility for [GTFOBins](https://gtfobins.github.io/) 
 - **gtfoblookup.py**: GTFOBLookup utility
 - **LICENSE.md**: License file
 - **README.md**: This file
+- **requirements.txt**: List of required Python packages
 
 ## Dependencies
 GTFOBLookup requires the following non-standard Python libraries to be installed:
@@ -14,6 +15,8 @@ GTFOBLookup requires the following non-standard Python libraries to be installed
 - colorama (`pip3 install colorama`)
 - git (`pip3 install gitpython`)
 - yaml (`pip3 install pyyaml`)
+
+These can all be installed with the following command: `pip3 install -r requirements.txt`
 
 ## Installation/Setup
 To install GTFOBLookup, git clone the repository to your machine and run `gtfoblookup.py update` whilst connected to the internet:
