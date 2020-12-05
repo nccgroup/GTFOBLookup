@@ -492,8 +492,15 @@ def parseFile(args):
     with open(args.executable, 'r') as f:
         exes = f.readlines()
     for exe in exes:
-        if exe.strip() != "":
-            args.executable = exe.strip()
+        exe = exe.strip()
+        if exe != "":
+            split = exe.split('/')
+            if len(split) > 1:
+                exe = split[-1]
+            else:
+                split = exe.split('\\')
+                exe = split[-1]
+            args.executable = exe
             search(args)
             
 def default(args):
