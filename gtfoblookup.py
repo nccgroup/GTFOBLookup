@@ -31,7 +31,6 @@ repos = {"GTFOBins": {
                     "dir": os.path.join(repodir, "GTFOBins.github.io"),
                     "exeDirs": ["_gtfobins"],
                     "exeFileExt": ".md",
-                    "opSys": "linux",
                     "cats": {"shell": "shell",
                              "cmd": "command",
                              "rev": "reverse-shell",
@@ -50,6 +49,10 @@ repos = {"GTFOBins": {
                              "all": "all"
                             },
                     "types": {},
+                    "prereqs": {},
+                    "services": {},
+                    "attackTypes": {},
+                    "opSyss": {},
                     "searchFunc": "gtfobSearch"
                     },
          "LOLBAS": {"url": "https://github.com/LOLBAS-Project/LOLBAS.git", 
@@ -57,7 +60,6 @@ repos = {"GTFOBins": {
                     "exeDirs": ["yml/OSBinaries", "yml/OSLibraries", 
                                 "yml/OSScripts", "yml/OtherMSBinaries"],
                     "exeFileExt": ".yml",
-                    "opSys": "windows",
                     "cats": {"ads": "ADS",
                              "awl": "AWL Bypass",
                              "comp": "Compile",
@@ -80,7 +82,42 @@ repos = {"GTFOBins": {
                                         "exeDirsIdx": 3},
                               "all": {"name": "all"}
                              },
+                    "prereqs": {},
+                    "services": {},
+                    "attackTypes": {},
+                    "opSyss": {},
                     "searchFunc": "lolbasSearch"
+                   },
+         "WADComs": {"url": "https://github.com/WADComs/WADComs.github.io.git", 
+                    "dir": os.path.join(repodir, "WADComs"),
+                    "exeDirs": ["_wadcoms"],
+                    "exeFileExt": ".md",
+                    "cats": {},
+                    "types": {},
+                    "prereqs": {"username": "Username",
+                                "password": "Password",
+                                "none": "No_Creds",
+                                "hash": "Hash",
+                                "shell": "Shell",
+                                "all": "all"
+                               },
+                    "services": {"smb": "SMB",
+                                 "wmi": "WMI",
+                                 "dcom": "DCOM",
+                                 "kerberos": "Kerberos",
+                                 "rpc": "RPC",
+                                 "ldap": "LDAP",
+                                 "ntlm": "NTLM"
+                                },
+                    "attackTypes": {"enum": "Enumeration",
+                                   "exploit": "Exploitation",
+                                   "persistence": "Persistence",
+                                   "privesc": "PrivEsc"
+                                  },
+                    "opSyss": {"windows": "Windows",
+                               "linux": "Linux"
+                              },
+                    "searchFunc": "wadcomsSearch"
                    }
         }
 
@@ -438,7 +475,7 @@ def typCheck(args):
     """Checks if a specified type is valid for a specified repo"""
     if args.typ.lower() not in repos[args.repo]['types'].keys():
         print("Invalid type supplied, run " + dim + "gtfoblookup.py " + 
-              repos[args.repo]['opSys'] + " --list types" + reset + " to see " + 
+              args.repo + " --list types" + reset + " to see " + 
               "all valid types")
         exit()    
 
