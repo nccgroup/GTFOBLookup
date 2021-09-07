@@ -115,21 +115,21 @@ def genParser():
     parserPurge.add_argument('-r', '--repo', help="Only delete the specified" +
                               " repository", metavar="repo", action='store', 
                              dest='repo')
-    #Linux
-    parserLinux = subparsers.add_parser('linux', help="search the local copy " +
+    #GTFOBins
+    parserGtfobins = subparsers.add_parser('gtfobins', help="search the local copy " +
                                         "of GTFOBins")
-    parserLinux.set_defaults(func=default, parser=parserLinux, 
+    parserGtfobins.set_defaults(func=default, parser=parserGtfobins, 
                              repo="GTFOBins")
-    linSubparsers = parserLinux.add_subparsers()
-    #Windows
-    parserWindows = subparsers.add_parser('windows', help="search the local " +
+    gtfobinsSubparsers = parserGtfobins.add_subparsers()
+    #LOLBAS
+    parserLolbas = subparsers.add_parser('lolbas', help="search the local " +
                                         "copy of LOLBAS")
-    parserWindows.set_defaults(func=default, parser=parserWindows, 
+    parserLolbas.set_defaults(func=default, parser=parserLolbas, 
                                repo="LOLBAS")
-    winSubparsers = parserWindows.add_subparsers()
+    lolbasSubparsers = parserLolbas.add_subparsers()
     #Common options
     for repo in repos:
-        parentParser = "parser{0}".format(repos[repo]['opSys'].capitalize())
+        parentParser = "parser{0}".format(repo.lower().capitalize())
         #List
         locals()[parentParser].add_argument('-l', '--list', help="list all" + 
                                             " types/categories/executables " +
@@ -138,10 +138,9 @@ def genParser():
                                             metavar="list", 
                                             action='store', dest='list')
         #Categories
-        osAbbr = repos[repo]['opSys'][:3]
-        parentParser = "{0}Subparsers".format(osAbbr)
+        parentParser = "{0}Subparsers".format(repo.lower())
         for cat in repos[repo]['cats']:
-            parserName = "parser{0}{1}".format(osAbbr.capitalize(),
+            parserName = "parser{0}{1}".format(repo.lower().capitalize(),
                                                cat.capitalize())
             if cat == "all":
                 helptxt = "search all categories of {0}".format(repo)
@@ -205,7 +204,7 @@ def errorInvalidRepo():
     print("Repository must be one of {0}".format(list(repos.keys())))
         
 def update(args):
-    """Updates local copies of GTFOBins and LOLBAS"""
+    """Updates local copies of repos"""
     toUpdate = genReposToChange(args)
     if toUpdate:
         for repo in toUpdate:
@@ -230,7 +229,7 @@ def update(args):
         errorInvalidRepo()
             
 def purge(args):
-    """Removes local copies of GTFOBins and LOLBAS"""
+    """Removes local copies of repos"""
     toPurge = genReposToChange(args)
     if toPurge:
         for repo in toPurge:
