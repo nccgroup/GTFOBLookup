@@ -492,7 +492,7 @@ def checkAttrs(dataLst, attrs, attr, field):
             dataLst.remove(data)
     return dataLst
 
-def extractMdWadcoms(paths, attrs): #TODO: Finish this
+def extractMdWadcoms(paths, attrs):
     """Extracts details of a specified executable with specified attributes from
     the local copy of WADComs
     """
