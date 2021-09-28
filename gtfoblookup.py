@@ -136,9 +136,9 @@ def genParser():
     """Generates a parser for command line arguments"""
     parser = argparse.ArgumentParser(description="Offline command line lookup" +
                                      " utility for GTFOBins " + 
-                                     "(https://gtfobins.github.io/) and " +
-                                     "LOLBAS " + 
-                                     "(https://lolbas-project.github.io/)")
+                                     "(https://gtfobins.github.io/), LOLBAS" +
+                                     "(https://lolbas-project.github.io/), " +
+                                     "and WADComs (https://wadcoms.github.io)")
     parser.set_defaults(func=printUsage, parser=parser)
     subparsers = parser.add_subparsers()
     #Update

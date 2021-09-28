@@ -1,5 +1,5 @@
 # GTFOBLookup
-Offline command line lookup utility for [GTFOBins](https://gtfobins.github.io/) and [LOLBAS](https://lolbas-project.github.io/).
+Offline command line lookup utility for [GTFOBins](https://gtfobins.github.io/), [LOLBAS](https://lolbas-project.github.io/), and [WADComs](https://wadcoms.github.io).
 
 ## Files
 - **.gitignore**: Gitignore file
@@ -26,7 +26,7 @@ To install GTFOBLookup, git clone the repository to your machine and run `gtfobl
 ## usage
 On Linux, navigate to the GTFOBLookup directory and run `man ./gtfoblookup.1` or see below:
 <pre>
-gtfoblookup.py [-h] {update,purge,linux,windows} ...
+gtfoblookup.py [-h] {update,purge,gtfobins,lolbas,wadcoms} ...
 
 OPTIONS
    Sub-commands
@@ -36,11 +36,14 @@ OPTIONS
        gtfoblookup.py purge
               remove local copies of repositories
 
-       gtfoblookup.py linux
+       gtfoblookup.py gtfobins
               search the local copy of GTFOBins
 
-       gtfoblookup.py windows
+       gtfoblookup.py lolbas
               search the local copy of LOLBAS
+
+       gtfoblookup.py wadcoms
+              search the local copy of WADComs
 
 OPTIONS 'gtfoblookup.py update'
        usage: gtfoblookup.py update [-h] [-r repo]
@@ -54,453 +57,102 @@ OPTIONS 'gtfoblookup.py purge'
        -r repo, --repo repo
               Only delete the specified repository
 
-OPTIONS 'gtfoblookup.py linux'
-       usage: gtfoblookup.py linux [-h] [-l list]
-                                     {shell,cmd,rev,nrev,bind,nbind,upload,download,write,read,load,suid,sudo,cap,lsuid,all}
-                                     ...
+OPTIONS 'gtfoblookup.py gtfobins'
+       usage: gtfoblookup.py gtfobins [-h] {list,search} ...
 
    Sub-commands
-       gtfoblookup.py linux shell
-              search the 'shell' category of GTFOBins
+       gtfoblookup.py gtfobins list
+              list all types/categories/executables/prerequisites/services/attack types/OSs featured in the local copy of GTFOBins
 
-       gtfoblookup.py linux cmd
-              search the 'command' category of GTFOBins
+       gtfoblookup.py gtfobins search
+              searchthe GTFOBins repository
 
-       gtfoblookup.py linux rev
-              search the 'reverse-shell' category of GTFOBins
+OPTIONS 'gtfoblookup.py gtfobins list'
+       usage: gtfoblookup.py gtfobins list [-h] attribute
 
-       gtfoblookup.py linux nrev
-              search the 'non-interactive-reverse-shell' category of GTFOBins
+       attribute
+              the attribute to list
 
-       gtfoblookup.py linux bind
-              search the 'bind-shell' category of GTFOBins
-
-       gtfoblookup.py linux nbind
-              search the 'non-interactive-bind-shell' category of GTFOBins
-
-       gtfoblookup.py linux upload
-              search the 'file-upload' category of GTFOBins
-
-       gtfoblookup.py linux download
-              search the 'file-download' category of GTFOBins
-
-       gtfoblookup.py linux write
-              search the 'file-write' category of GTFOBins
-
-       gtfoblookup.py linux read
-              search the 'file-read' category of GTFOBins
-
-       gtfoblookup.py linux load
-              search the 'library-load' category of GTFOBins
-
-       gtfoblookup.py linux suid
-              search the 'suid' category of GTFOBins
-
-       gtfoblookup.py linux sudo
-              search the 'sudo' category of GTFOBins
-
-       gtfoblookup.py linux cap
-              search the 'capabilities' category of GTFOBins
-
-       gtfoblookup.py linux lsuid
-              search the 'limited-suid' category of GTFOBins
-
-       gtfoblookup.py linux all
-              search all categories of GTFOBins
-
-OPTIONS 'gtfoblookup.py linux shell'
-       usage: gtfoblookup.py linux shell [-h] [-f] executable
+OPTIONS 'gtfoblookup.py gtfobins search'
+       usage: gtfoblookup.py gtfobins search [-h] [-c categories] [-f] executable
 
        executable
               the executable to search for
 
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-OPTIONS 'gtfoblookup.py linux cmd'
-       usage: gtfoblookup.py linux cmd [-h] [-f] executable
-
-       executable
-              the executable to search for
+       -c categories, --category categories
+              category or categories (comma separated) to search in
 
        -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
+              use a file containing a list of executables (one per line) instead of a single executable
 
-OPTIONS 'gtfoblookup.py linux rev'
-       usage: gtfoblookup.py linux rev [-h] [-f] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-OPTIONS 'gtfoblookup.py linux nrev'
-       usage: gtfoblookup.py linux nrev [-h] [-f] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-OPTIONS 'gtfoblookup.py linux bind'
-       usage: gtfoblookup.py linux bind [-h] [-f] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-OPTIONS 'gtfoblookup.py linux nbind'
-       usage: gtfoblookup.py linux nbind [-h] [-f] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-OPTIONS 'gtfoblookup.py linux upload'
-       usage: gtfoblookup.py linux upload [-h] [-f] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-OPTIONS 'gtfoblookup.py linux download'
-       usage: gtfoblookup.py linux download [-h] [-f] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-OPTIONS 'gtfoblookup.py linux write'
-       usage: gtfoblookup.py linux write [-h] [-f] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-OPTIONS 'gtfoblookup.py linux read'
-       usage: gtfoblookup.py linux read [-h] [-f] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-OPTIONS 'gtfoblookup.py linux load'
-       usage: gtfoblookup.py linux load [-h] [-f] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-OPTIONS 'gtfoblookup.py linux suid'
-       usage: gtfoblookup.py linux suid [-h] [-f] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-OPTIONS 'gtfoblookup.py linux sudo'
-       usage: gtfoblookup.py linux sudo [-h] [-f] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-OPTIONS 'gtfoblookup.py linux cap'
-       usage: gtfoblookup.py linux cap [-h] [-f] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-OPTIONS 'gtfoblookup.py linux lsuid'
-       usage: gtfoblookup.py linux lsuid [-h] [-f] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-OPTIONS 'gtfoblookup.py linux all'
-       usage: gtfoblookup.py linux all [-h] [-f] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-       -l list, --list list
-              list all types/categories/executables featured in the local copy of GTFOBins
-
-OPTIONS 'gtfoblookup.py windows'
-       usage: gtfoblookup.py windows [-h] [-l list]
-                                       {ads,awl,comp,copy,creds,decode,download,dump,encode,exec,recon,uac,upload,all}
-                                       ...
+OPTIONS 'gtfoblookup.py lolbas'
+       usage: gtfoblookup.py lolbas [-h] {list,search} ...
 
    Sub-commands
-       gtfoblookup.py windows ads
-              search the 'ADS' category of LOLBAS
+       gtfoblookup.py lolbas list
+              list all types/categories/executables/prerequisites/services/attack types/OSs featured in the local copy of LOLBAS
 
-       gtfoblookup.py windows awl
-              search the 'AWL Bypass' category of LOLBAS
+       gtfoblookup.py lolbas search
+              searchthe LOLBAS repository
 
-       gtfoblookup.py windows comp
-              search the 'Compile' category of LOLBAS
+OPTIONS 'gtfoblookup.py lolbas list'
+       usage: gtfoblookup.py lolbas list [-h] attribute
 
-       gtfoblookup.py windows copy
-              search the 'Copy' category of LOLBAS
+       attribute
+              the attribute to list
 
-       gtfoblookup.py windows creds
-              search the 'Credentials' category of LOLBAS
-
-       gtfoblookup.py windows decode
-              search the 'Decode' category of LOLBAS
-
-       gtfoblookup.py windows download
-              search the 'Download' category of LOLBAS
-
-       gtfoblookup.py windows dump
-              search the 'Dump' category of LOLBAS
-
-       gtfoblookup.py windows encode
-              search the 'Encode' category of LOLBAS
-
-       gtfoblookup.py windows exec
-              search the 'Execute' category of LOLBAS
-
-       gtfoblookup.py windows recon
-              search the 'Reconnaissance' category of LOLBAS
-
-       gtfoblookup.py windows uac
-              search the 'UAC Bypass' category of LOLBAS
-
-       gtfoblookup.py windows upload
-              search the 'Upload' category of LOLBAS
-
-       gtfoblookup.py windows all
-              search all categories of LOLBAS
-
-OPTIONS 'gtfoblookup.py windows ads'
-       usage: gtfoblookup.py windows ads [-h] [-f] [-t type] executable
+OPTIONS 'gtfoblookup.py lolbas search'
+       usage: gtfoblookup.py lolbas search [-h] [-c categories] [-t types] [-f]
+                                             executable
 
        executable
               the executable to search for
 
+       -c categories, --category categories
+              category or categories (comma separated) to search in
+
+       -t types, --type types
+              type or types (comma separated)of executable to search for
+
        -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
+              use a file containing a list of executables (one per line) instead of a single executable
 
-       -t type, --type type
-              search for a specific type of executable
+OPTIONS 'gtfoblookup.py wadcoms'
+       usage: gtfoblookup.py wadcoms [-h] {list,search} ...
 
-OPTIONS 'gtfoblookup.py windows awl'
-       usage: gtfoblookup.py windows awl [-h] [-f] [-t type] executable
+   Sub-commands
+       gtfoblookup.py wadcoms list
+              list all types/categories/executables/prerequisites/services/attack types/OSs featured in the local copy of WADComs
+
+       gtfoblookup.py wadcoms search
+              searchthe WADComs repository
+
+OPTIONS 'gtfoblookup.py wadcoms list'
+       usage: gtfoblookup.py wadcoms list [-h] attribute
+
+       attribute
+              the attribute to list
+
+OPTIONS 'gtfoblookup.py wadcoms search'
+       usage: gtfoblookup.py wadcoms search [-h] [-p prerequisites] [-s services]
+                                              [-a attack_types] [-o OSs] [-f]
+                                              executable
 
        executable
               the executable to search for
 
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
+       -p prerequisites, --prereq prerequisites
+              search for executables with a specific prerequisite or prerequisites (comma separated)
 
-       -t type, --type type
-              search for a specific type of executable
+       -s services, --service services
+              search for executables that interract with aspecific service or services(comma separated)
 
-OPTIONS 'gtfoblookup.py windows comp'
-       usage: gtfoblookup.py windows comp [-h] [-f] [-t type] executable
+       -a attack_types, --attacktype attack_types
+              search for executables that can be used for aspecific type or types (comma separated) of attacks
 
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-       -t type, --type type
-              search for a specific type of executable
-
-OPTIONS 'gtfoblookup.py windows copy'
-       usage: gtfoblookup.py windows copy [-h] [-f] [-t type] executable
-
-       executable
-              the executable to search for
+       -o OSs, --os OSs
+              search for executables that can be run on a specific operating system oroperating systems (comma separated)
 
        -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-       -t type, --type type
-              search for a specific type of executable
-
-OPTIONS 'gtfoblookup.py windows creds'
-       usage: gtfoblookup.py windows creds [-h] [-f] [-t type] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-       -t type, --type type
-              search for a specific type of executable
-
-OPTIONS 'gtfoblookup.py windows decode'
-       usage: gtfoblookup.py windows decode [-h] [-f] [-t type] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-       -t type, --type type
-              search for a specific type of executable
-
-OPTIONS 'gtfoblookup.py windows download'
-       usage: gtfoblookup.py windows download [-h] [-f] [-t type] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-       -t type, --type type
-              search for a specific type of executable
-
-OPTIONS 'gtfoblookup.py windows dump'
-       usage: gtfoblookup.py windows dump [-h] [-f] [-t type] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-       -t type, --type type
-              search for a specific type of executable
-
-OPTIONS 'gtfoblookup.py windows encode'
-       usage: gtfoblookup.py windows encode [-h] [-f] [-t type] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-       -t type, --type type
-              search for a specific type of executable
-
-OPTIONS 'gtfoblookup.py windows exec'
-       usage: gtfoblookup.py windows exec [-h] [-f] [-t type] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-       -t type, --type type
-              search for a specific type of executable
-
-OPTIONS 'gtfoblookup.py windows recon'
-       usage: gtfoblookup.py windows recon [-h] [-f] [-t type] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-       -t type, --type type
-              search for a specific type of executable
-
-OPTIONS 'gtfoblookup.py windows uac'
-       usage: gtfoblookup.py windows uac [-h] [-f] [-t type] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-       -t type, --type type
-              search for a specific type of executable
-
-OPTIONS 'gtfoblookup.py windows upload'
-       usage: gtfoblookup.py windows upload [-h] [-f] [-t type] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-       -t type, --type type
-              search for a specific type of executable
-
-OPTIONS 'gtfoblookup.py windows all'
-       usage: gtfoblookup.py windows all [-h] [-f] [-t type] executable
-
-       executable
-              the executable to search for
-
-       -f, --file
-              use a file containing a list of executables (one per line) instead of a single
-              executable
-
-       -t type, --type type
-              search for a specific type of executable
-
-       -l list, --list list
-              list all types/categories/executables featured in the local copy of LOLBAS
+              use a file containing a list of executables (one per line) instead of a single executable
 </pre>
