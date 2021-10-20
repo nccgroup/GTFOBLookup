@@ -286,7 +286,7 @@ def update(args):
             print("Checking {0} for updates...".format(repo))
             if not os.path.exists(repos[repo]['dir']):
                 print("Local copy of {0} not found, ".format(repo) + 
-                      "downloading...")
+                      "downloading to {0}...".format(repos[repo]['dir']))
                 Repo.clone_from(repos[repo]['url'], repos[repo]['dir'])
                 print(green + "Local copy of {0} downloaded".format(repo) + 
                       reset)
