@@ -23,7 +23,7 @@ These can all be installed with the following command: `pip install -r requireme
 ## Installation/Setup
 To install GTFOBLookup, git clone the repository to your machine and run `gtfoblookup.py update` whilst connected to the internet:
 
-## usage
+## Usage
 On Linux, navigate to the GTFOBLookup directory and run `man ./gtfoblookup.1` or see below:
 <pre>
 gtfoblookup.py [-h] {update,purge,gtfobins,lolbas,wadcoms} ...
