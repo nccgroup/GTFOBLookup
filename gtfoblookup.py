@@ -675,8 +675,11 @@ def search(args):
 
 def parseFile(args):
     """Parses a list of executables in a supplied file"""
-    with open(args.executable, 'r') as f:
-        exes = f.readlines()
+    try:
+        with open(args.executable, 'r') as f:
+            exes = f.readlines()
+    except FileNotFoundError as e:
+        sys.exit("{0}File '{1}' does not exist{2}".format(red, args.executable, reset))
     for exe in exes:
         exe = exe.strip()
         if exe != "":
