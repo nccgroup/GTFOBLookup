@@ -18,6 +18,8 @@ import colorama
 from git import Repo
 import os
 import re
+from glob import glob
+from pathlib import Path
 import shutil
 import sys
 import textwrap
@@ -401,35 +403,42 @@ def extractMdGtfob(paths, attrs):
     """Extracts details of a specified function of a specified binary from the 
     local copy of GTFOBins
     """
-    md = parseYaml(paths[0])
+    paths = [Path(p) for p in glob(paths[0])]
     indent = "        "
-    for cat in attrs['categories']:
-        print("    {0}{1}{2}:\n".format(bold, cat, reset))
-        for data in md:
-            if cat in data['functions']:
-                for func in data['functions'][cat]:
-                    for attr in func:
-                        lines = func[attr].split("\n")
-                        initLine = "{0}{1}{2}: ".format(bold, 
-                                                    attr.capitalize(),
-                                                    reset)
-                        if attr == "code":
-                            initLine += dim
-                        initLine += lines[0]
-                        lines.pop(0)
-                        subIndent = calcSubIndent(indent, attr, 2)
-                        print(textwrap.fill(initLine, width=80,
-                                            initial_indent=indent, 
-                                            subsequent_indent=subIndent)
-                                            )
-                        for line in lines:
-                            if line != '':
-                                print(textwrap.fill(line, width=80,
-                                    initial_indent=subIndent, 
-                                    subsequent_indent=subIndent))
-                    print(reset)
-            else:
-                errorNoCatResults()
+    for p in paths:
+        md = parseYaml(p)
+        for cat in attrs['categories']:
+            for data in md:
+                if cat in data['functions']:
+                    if len(paths) == 1:
+                        print("    {0}{1}{2}:\n".format(bold, cat, reset))
+                    else:
+                        exe = os.path.split(p)[-1].split('.')[0]
+                        print("    {0}{1}{4} for {0}{2}{3}{4}:\n".format(bold, cat, green, exe, reset))
+                    for func in data['functions'][cat]:
+                        for attr in func:
+                            lines = func[attr].split("\n")
+                            initLine = "{0}{1}{2}: ".format(bold, 
+                                                        attr.capitalize(),
+                                                        reset)
+                            if attr == "code":
+                                initLine += dim
+                            initLine += lines[0]
+                            lines.pop(0)
+                            subIndent = calcSubIndent(indent, attr, 2)
+                            print(textwrap.fill(initLine, width=80,
+                                                initial_indent=indent, 
+                                                subsequent_indent=subIndent)
+                                                )
+                            for line in lines:
+                                if line != '':
+                                    print(textwrap.fill(line, width=80,
+                                        initial_indent=subIndent, 
+                                        subsequent_indent=subIndent))
+                        print(reset)
+                elif len(paths) == 1:
+                    print("    {0}{1}{2}:\n".format(bold, cat, reset))
+                    errorNoCatResults()
 
 def splitOnCap(string):
     """Splits a string into words based on capitalisation whilst preserving 
@@ -450,17 +459,23 @@ def extractYmlLolbas(paths, attrs):
     """
     ymls = []
     for path in paths:
-        yml = (parseYaml(path))
-        if yml is not None:
-            ymls.append(yml)
+        all_yml = [Path(p) for p in glob(path)]
+        for f in all_yml:
+            yml = (parseYaml(f))
+            if yml is not None:
+                ymls.append(yml)
     indent = "        "
     for cat in attrs['categories']:
-        print("    {0}{1}{2}:\n".format(bold, cat, reset))
         results = False
         for yml in ymls:
             for data in yml:
                 for cmd in data['Commands']:
                     if cmd['Category'] == cat:
+                        if '*' in paths[0]:
+                            exe = yml[0]['Name']
+                            print("    {0}{1}{2} for {0}{3}{4}{2}:\n".format(bold, cat, reset, green, exe))
+                        else:
+                            print("    {0}{1}{2}:\n".format(bold, cat, reset))
                         for attr in cmd:
                             if attr != "Category":
                                 line = "{0}{1}{2}: ".format(bold, splitOnCap(attr),
@@ -476,6 +491,7 @@ def extractYmlLolbas(paths, attrs):
                         print() #Prints newline character
                         results = True
         if not results:
+            print("    {0}{1}{2}:\n".format(bold, cat, reset))
             errorNoCatResults()
 
 def checkAttrs(dataLst, attrs, attr, field):
@@ -588,9 +604,13 @@ def gtfobSearch(args):
     """
     repCheck(args.repo)
     exe = args.executable.lower()
+    if exe == 'all':
+        exe = '*'
     path = [os.path.join(repos[args.repo]['dir'], repos[args.repo]['exeDirs'][
                          0], exe + repos[args.repo]['exeFileExt'])]
-    if os.path.isfile(path[0]):   
+    if glob(path[0]):
+        if exe == '*':
+            exe = 'all'
         print(green + bold + exe + reset + green + ":\n" + reset)
         extract(args, path, extractMdGtfob)
     else:
@@ -608,6 +628,8 @@ def lolbasSearch(args):
         for i in exeSplit:
             i = parts.append(i.capitalize())
         exe = ".".join(parts[:-1])
+    elif exe == 'all':
+        exe = '*'
     else:
         exe = exe.capitalize()
     paths = []
@@ -629,20 +651,25 @@ def lolbasSearch(args):
                                               repos[args.repo]['exeFileExt'])
                                 )
     tryExtract = False
-    for path in paths:
-        if os.path.isfile(path):   
-            try:
-                name = "{0}.{1}".format(exe, parts[-1].lower())
-            except:
-                name = exe
-            parsed = parseYaml(path)
-            for data in parsed:
-                if data is not None and (data['Name'] == name or 
-                data['Name'].startswith(name + ".")):
-                    print(green + bold + name + reset + green + ":\n" + reset)        
-                    tryExtract = True
-                    break
-    if tryExtract:
+    if exe == '*':
+        name = 'All'
+        tryExtract = True
+    else:
+        for path in paths:
+            if os.path.isfile(path):   
+                try:
+                    name = "{0}.{1}".format(exe, parts[-1].lower())
+                except:
+                    name = exe
+                parsed = parseYaml(path)
+                for data in parsed:
+                    if data is not None and (data['Name'] == name or 
+                    data['Name'].startswith(name + ".")):
+                        tryExtract = True
+                        break
+
+    if tryExtract or exe == 'All':
+        print(green + bold + name + reset + green + ":\n" + reset)        
         extract(args, paths, extractYmlLolbas)
     else:
         errorExeNotFound(args)
