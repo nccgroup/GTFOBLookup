@@ -467,7 +467,7 @@ def extractYmlLolbas(paths, attrs):
                                                             reset)
                                 if attr == "Command":
                                     line += dim
-                                line += cmd[attr] if cmd[attr] else 'NA'
+                                line += cmd[attr] if cmd[attr] else 'N/A'
                                 line += reset
                                 subIndent = calcSubIndent(indent, attr, 3)
                                 print(textwrap.fill(line, width=80,
