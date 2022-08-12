@@ -77,7 +77,7 @@ OPTIONS 'gtfoblookup.py gtfobins search'
        usage: gtfoblookup.py gtfobins search [-h] [-c categories] [-f] executable
 
        executable
-              the executable to search for
+              the executable to search for (can be `all`)
 
        -c categories, --category categories
               category or categories (comma separated) to search in
@@ -106,7 +106,7 @@ OPTIONS 'gtfoblookup.py lolbas search'
                                              executable
 
        executable
-              the executable to search for
+              the executable to search for (can be `all`)
 
        -c categories, --category categories
               category or categories (comma separated) to search in
