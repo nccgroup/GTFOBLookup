@@ -245,7 +245,8 @@ def genParser():
                                   dest='func')
         #Executable
         parserSearch.add_argument('executable', help="the executable to " +
-                                  "search for")
+                                  "search for (use \"all\" to show results " +
+                                  "for all executables")
     return parser
 
 def printUsage(args):
@@ -485,7 +486,11 @@ def checkAttrs(dataLst, attrs, attr, field):
     for data in dataLst:
         results = False
         for attrib in attrs[attr]:
-            if attrib in data[field]:
+            try:
+                if attrib in data[field]:
+                    results = True
+                    break
+            except:
                 results = True
                 break
         if not results:
@@ -582,14 +587,15 @@ def errorExeNotFound(args):
           args.executable) + args.repo + " with the specified attributes" +
           reset)
 
-def checkExeFiles(exe, dir):
+def checkExeFiles(exe, dir, extension):
     """Checks if a file exists in the specified dir that matches the specified
     exe and returns the matching filepath
     """
     files = os.listdir(dir)
     for f in files:
         parts = f.split(".")
-        if parts[0].upper() == exe.upper():
+        if parts[0].upper() == exe.upper() \
+            and "." + parts[1].upper() == extension.upper():
             return os.path.join(dir, f)
     return None
 
@@ -599,13 +605,22 @@ def gtfobSearch(args):
     """
     repCheck(args.repo)
     exe = args.executable.lower()
-    path = os.path.join(repos[args.repo]['dir'], repos[args.repo]['exeDirs'][0])
-    path = checkExeFiles(exe, path)
-    if path is not None and os.path.isfile(path):   
-        print(green + bold + exe + reset + green + ":\n" + reset)
-        extract(args, [path], extractMdGtfob)
+    dir = os.path.join(repos[args.repo]['dir'], repos[args.repo]['exeDirs'][0])
+    paths = []
+    if exe == "all":
+        for f in os.listdir(dir):
+            if f.endswith(repos['GTFOBins']['exeFileExt']):
+                paths.append(os.path.join(dir, f))
     else:
-        errorExeNotFound(args)
+        paths.append(checkExeFiles(exe, dir, repos['GTFOBins']['exeFileExt']))
+    for path in paths:
+        if path is not None and os.path.isfile(path):   
+            print(path)
+            print(green + bold + path.split("/")[-1].split(".")[0] + reset + 
+                  green + ":\n" + reset)
+            extract(args, [path], extractMdGtfob)
+        else:
+            errorExeNotFound(args)
 
 def lolbasSearch(args):
     """Searches local copy of LOLBAS for a specified executable of a specified 
@@ -614,37 +629,52 @@ def lolbasSearch(args):
     repCheck(args.repo)
     exe = args.executable.lower()
     exeSplit = exe.split(".")
-    parts = []
     if len(exeSplit) > 1:
-        for i in exeSplit:
-            i = parts.append(i.capitalize())
-        exe = ".".join(parts[:-1])
-    else:
-        exe = exe.capitalize()
+        exe = ".".join(exeSplit[:-1])
     paths = []
     if args.types:
         types = args.types.lower().split(",")
         if "all" in types:
             for i in repos[args.repo]['types'].values():
                 if i['name'] != "all":
-                    f = checkExeFiles(exe, 
-                                      os.path.join(repos[args.repo]['dir'],
-                                  repos[args.repo]["exeDirs"][i['exeDirsIdx']]))
-                    if f is not None: paths.append(f) 
+                    dir = os.path.join(repos[args.repo]['dir'],
+                                   repos[args.repo]["exeDirs"][i['exeDirsIdx']])
+                    if exe == "all":
+                        for f in os.listdir(dir):
+                            if f.endswith(repos['LOLBAS']['exeFileExt']):
+                                paths.append(os.path.join(dir, f))
+                    else:
+                        f = checkExeFiles(exe, dir,
+                                          repos['LOLBAS']['exeFileExt'])
+                        if f is not None: paths.append(f) 
         else:
             for typ in types:
                 if typ in repos[args.repo]['types']:
-                    f = checkExeFiles(exe, 
-                                      os.path.join(repos[args.repo]['dir'],
+                    dir = os.path.join(repos[args.repo]['dir'],
                                       repos[args.repo]["exeDirs"][repos[
-                                      args.repo]['types'][typ]['exeDirsIdx']]))
-                    if f is not None: paths.append(f) 
+                                      args.repo]['types'][typ]['exeDirsIdx']])
+                    if exe == "all":
+                        for f in os.listdir(dir):
+                            if f.endswith(repos['LOLBAS']['exeFileExt']):
+                                paths.append(os.path.join(dir, f))
+                    else:
+                        f = checkExeFiles(exe, dir,
+                                          repos['LOLBAS']['exeFileExt'])
+                        if f is not None: paths.append(f) 
     tryExtract = False
     for path in paths:
-        if os.path.isfile(path):   
-            try:
-                name = "{0}.{1}".format(exe, parts[-1].lower())
-            except:
+        if exe == "all":
+            parsed = parseYaml(path)
+            for data in parsed:
+                if data is not None:
+                    print(green + bold + data['Name'] + reset + green + ":\n" +
+                          reset)        
+                    tryExtract = True
+                    break
+        elif os.path.isfile(path):   
+            if len(exeSplit) > 2:
+                name = "{0}.{1}".format(exe, exeSplit[-1].lower())
+            else:
                 name = exe
             parsed = parseYaml(path)
             for data in parsed:
@@ -653,10 +683,10 @@ def lolbasSearch(args):
                     print(green + bold + name + reset + green + ":\n" + reset)        
                     tryExtract = True
                     break
-    if tryExtract:
-        extract(args, paths, extractYmlLolbas)
-    else:
-        errorExeNotFound(args)
+        if tryExtract:
+            extract(args, [path], extractYmlLolbas)
+        else:
+            errorExeNotFound(args)
 
 def wadcomsSearch(args):
     """Searches local copy of WADComs for a specified executable with specified
@@ -669,11 +699,14 @@ def wadcomsSearch(args):
                  args.executable) else args.executable
     paths = []
     results = False
-    for file in os.listdir(searchPath):
-        if file.endswith(repos[args.repo]['exeFileExt']) and searchName in file:
-            results = True
-            paths.append(os.path.join(searchPath, file))
-    if results:
+    if args.executable.lower() == "all":
+        for f in os.listdir(searchPath):
+            if f.endswith(repos['WADComs']['exeFileExt']):
+                paths.append(os.path.join(searchPath, f))
+    else:
+        paths.append(checkExeFiles(args.executable, searchPath,
+                                repos['WADComs']['exeFileExt']))
+    if len(paths):
         extract(args, paths, extractMdWadcoms)
     else:
         errorExeNotFound(args)
