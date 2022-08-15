@@ -582,17 +582,28 @@ def errorExeNotFound(args):
           args.executable) + args.repo + " with the specified attributes" +
           reset)
 
+def checkExeFiles(exe, dir):
+    """Checks if a file exists in the specified dir that matches the specified
+    exe and returns the matching filepath
+    """
+    files = os.listdir(dir)
+    for f in files:
+        parts = f.split(".")
+        if parts[0].upper() == exe.upper():
+            return os.path.join(dir, f)
+    return None
+
 def gtfobSearch(args):
     """Searches local copy of GTFOBins for a specified executable in a 
     specified category
     """
     repCheck(args.repo)
     exe = args.executable.lower()
-    path = [os.path.join(repos[args.repo]['dir'], repos[args.repo]['exeDirs'][
-                         0], exe + repos[args.repo]['exeFileExt'])]
-    if os.path.isfile(path[0]):   
+    path = os.path.join(repos[args.repo]['dir'], repos[args.repo]['exeDirs'][0])
+    path = checkExeFiles(exe, path)
+    if path is not None and os.path.isfile(path):   
         print(green + bold + exe + reset + green + ":\n" + reset)
-        extract(args, path, extractMdGtfob)
+        extract(args, [path], extractMdGtfob)
     else:
         errorExeNotFound(args)
 
@@ -616,18 +627,18 @@ def lolbasSearch(args):
         if "all" in types:
             for i in repos[args.repo]['types'].values():
                 if i['name'] != "all":
-                    paths.append(os.path.join(repos[args.repo]['dir'],
-                                 repos[args.repo]["exeDirs"][i['exeDirsIdx']],
-                                 exe + repos[args.repo]['exeFileExt']))
+                    f = checkExeFiles(exe, 
+                                      os.path.join(repos[args.repo]['dir'],
+                                  repos[args.repo]["exeDirs"][i['exeDirsIdx']]))
+                    if f is not None: paths.append(f) 
         else:
             for typ in types:
                 if typ in repos[args.repo]['types']:
-                    paths.append(os.path.join(repos[args.repo]['dir'],
-                                              repos[args.repo]["exeDirs"][repos[
-                                              args.repo]['types'][typ][
-                                              'exeDirsIdx']], exe +
-                                              repos[args.repo]['exeFileExt'])
-                                )
+                    f = checkExeFiles(exe, 
+                                      os.path.join(repos[args.repo]['dir'],
+                                      repos[args.repo]["exeDirs"][repos[
+                                      args.repo]['types'][typ]['exeDirsIdx']]))
+                    if f is not None: paths.append(f) 
     tryExtract = False
     for path in paths:
         if os.path.isfile(path):   
@@ -637,8 +648,8 @@ def lolbasSearch(args):
                 name = exe
             parsed = parseYaml(path)
             for data in parsed:
-                if data is not None and (data['Name'] == name or 
-                data['Name'].startswith(name + ".")):
+                if data is not None and (data['Name'].upper() == name.upper() or 
+                data['Name'].upper().startswith(name.upper() + ".")):
                     print(green + bold + name + reset + green + ":\n" + reset)        
                     tryExtract = True
                     break
