@@ -615,7 +615,6 @@ def gtfobSearch(args):
         paths.append(checkExeFiles(exe, dir, repos['GTFOBins']['exeFileExt']))
     for path in paths:
         if path is not None and os.path.isfile(path):   
-            print(path)
             print(green + bold + path.split("/")[-1].split(".")[0] + reset + 
                   green + ":\n" + reset)
             extract(args, [path], extractMdGtfob)
