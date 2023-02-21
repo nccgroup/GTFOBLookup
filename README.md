@@ -1,5 +1,5 @@
 # GTFOBLookup
-Offline command line lookup utility for [GTFOBins](https://gtfobins.github.io/), [LOLBAS](https://lolbas-project.github.io/), and [WADComs](https://wadcoms.github.io).
+Offline command line lookup utility for [GTFOBins](https://gtfobins.github.io/), [LOLBAS](https://lolbas-project.github.io/), [WADComs](https://wadcoms.github.io), and [HijackLibs](https://hijacklibs.net/).
 
 ## Files
 - **.gitignore**: Gitignore file
@@ -26,7 +26,7 @@ To install GTFOBLookup, git clone the repository to your machine and run `gtfobl
 ## Usage
 On Linux, navigate to the GTFOBLookup directory and run `man ./gtfoblookup.1` or see below:
 <pre>
-gtfoblookup.py [-h] {update,purge,gtfobins,lolbas,wadcoms} ...
+gtfoblookup.py [-h] {update,purge,gtfobins,lolbas,wadcoms,hijacklibs} ...
 
 OPTIONS
    Sub-commands
@@ -44,6 +44,9 @@ OPTIONS
 
        gtfoblookup.py wadcoms
               search the local copy of WADComs
+
+       gtfoblookup.py hijacklibs
+              search the local copy of HijackLibs
 
 OPTIONS 'gtfoblookup.py update'
        usage: gtfoblookup.py update [-h] [-r repo]
@@ -152,6 +155,38 @@ OPTIONS 'gtfoblookup.py wadcoms search'
 
        -o OSs, --os OSs
               search for executables that can be run on a specific operating system oroperating systems (comma separated)
+
+       -f, --file
+              use a file containing a list of executables (one per line) instead of a single executable
+
+OPTIONS 'gtfoblookup.py hijacklibs'
+       usage: gtfoblookup.py hijacklibs [-h] {list,search} ...
+
+  Sub-commands 'gtfoblookup.py hijacklibs'
+       gtfoblookup.py hijacklibs list
+              list all types/categories/executables/prerequisites/services/attack types/OSs featured in the local copy of HijackLibs
+
+       gtfoblookup.py hijacklibs search
+              searchthe HijackLibs repository
+
+OPTIONS 'gtfoblookup.py hijacklibs list'
+       usage: gtfoblookup.py hijacklibs list [-h] attribute
+
+       attribute
+              the attribute to list
+
+  Sub-commands 'gtfoblookup.py hijacklibs search'
+       usage: gtfoblookup.py hijacklibs search [-h] [-a attack_types] [-v vendors] [-f] executable
+
+       executable
+              the executable to search for (use "all" to show results for all executables)
+
+OPTIONS 'gtfoblookup.py hijacklibs search'
+       -a attack_types, --attacktype attack_types
+              search for executables that can be used for aspecific type or types (comma separated) of attacks
+
+       -v vendors, --vendor vendors
+              search for executables from a specific vendor or vendors (comma separated)
 
        -f, --file
               use a file containing a list of executables (one per line) instead of a single executable

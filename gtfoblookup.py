@@ -16,6 +16,7 @@ import argparse
 from appdirs import user_cache_dir
 import colorama
 from git import Repo
+from glob import glob
 import os
 import re
 import shutil
@@ -53,6 +54,7 @@ repos = {"GTFOBins": {
                     "services": {},
                     "attacktypes": {},
                     "os": {},
+                    "vendors": False,
                     "searchFunc": "gtfobSearch"
                     },
          "LOLBAS": {"url": "https://github.com/LOLBAS-Project/LOLBAS.git", 
@@ -86,6 +88,7 @@ repos = {"GTFOBins": {
                     "services": {},
                     "attacktypes": {},
                     "os": {},
+                    "vendors": False,
                     "searchFunc": "lolbasSearch"
                    },
          "WADComs": {"url": "https://github.com/WADComs/WADComs.github.io.git", 
@@ -120,8 +123,28 @@ repos = {"GTFOBins": {
                            "linux": "Linux",
                            "all": "all"
                           },
+                    "vendors": False,
                     "searchFunc": "wadcomsSearch"
-                   }
+                   },
+         "HijackLibs": {"url": "https://github.com/wietze/HijackLibs.git",
+                        "dir": os.path.join(repodir, "HijackLibs"),
+                        "exeDirs": ["yml/3rd_party/*", "yml/microsoft/built-in",
+                                    "yml/microsoft/external"],
+                        "exeFileExt": ".yml",
+                        "categories": {},
+                        "types": {},
+                        "prereqs": {},
+                        "services": {},
+                        "attacktypes": {"sideloading": "Sideloading",
+                                        "variable": "Environment Variable",
+                                        "phantom": "Phantom",
+                                        "order": "Search Order",
+                                        "all": "all"
+                                       },
+                        "os": {},
+                        "vendors": True,
+                        "searchFunc": "hijackSearch"
+                       }
         }
 
 #Text formatting
@@ -138,7 +161,8 @@ def genParser():
                                      " utility for GTFOBins " + 
                                      "(https://gtfobins.github.io/), LOLBAS" +
                                      "(https://lolbas-project.github.io/), " +
-                                     "and WADComs (https://wadcoms.github.io)")
+                                     "WADComs (https://wadcoms.github.io), " +
+                                     "HijackLibs (https://hijacklibs.net/)")
     parser.set_defaults(func=printUsage, parser=parser)
     subparsers = parser.add_subparsers()
     #Update
@@ -173,6 +197,12 @@ def genParser():
     parserWadcoms.set_defaults(func=printUsage, parser=parserWadcoms, 
                                repo="WADComs")
     wadcomsSubparsers = parserWadcoms.add_subparsers()
+    #HijackLibs
+    parserHijacklibs = subparsers.add_parser('hijacklibs', help="search the " +
+                                        "local copy of HijackLibs")
+    parserHijacklibs.set_defaults(func=printUsage, parser=parserHijacklibs, 
+                               repo="HijackLibs")
+    hijacklibsSubparsers = parserHijacklibs.add_subparsers()
     #Common options
     for repo in repos:
         parentParser = "parser{0}".format(repo.lower().capitalize())
@@ -237,6 +267,14 @@ def genParser():
                                       "operating systems (comma separated)",
                                       action='store', dest='os', metavar='OSs')
             parserSearch.set_defaults(os="all")
+        #Vendors
+        if repos[repo]['vendors']:
+            parserSearch.add_argument('-v', '--vendor', help="search for " +
+                                      "executables from a specific vendor or " +
+                                      "vendors (comma separated)",
+                                      action='store', dest='vendors',
+                                      metavar='vendors')
+            parserSearch.set_defaults(vendors="all")
         #File
         parserSearch.add_argument('-f', '--file', help="use a file " + 
                                   "containing a list of executables (one per " +
@@ -246,7 +284,7 @@ def genParser():
         #Executable
         parserSearch.add_argument('executable', help="the executable to " +
                                   "search for (use \"all\" to show results " +
-                                  "for all executables")
+                                  "for all executables)")
     return parser
 
 def printUsage(args):
@@ -333,16 +371,17 @@ def listExes(args):
     """Lists the executables featured in the local copy of a repo"""
     exes = []
     for folder in repos[args.repo]['exeDirs']:
-        for file in os.listdir(os.path.join(repos[args.repo]['dir'], folder)):
-            if file.endswith(repos[args.repo]['exeFileExt']):
-                if repos[args.repo]['exeFileExt'] == ".md":
-                    exes.append(file[:-3])
-                elif repos[args.repo]['exeFileExt'] == ".yml":
-                    ymlParsed = parseYaml(os.path.join(repos[args.repo]['dir'], 
-                                          folder, file))
-                    for data in ymlParsed:
-                        if data is not None:
-                            exes.append(data['Name'])
+        folder = os.path.join(repos[args.repo]['dir'], folder)
+        for folder in glob(folder):
+            for file in os.listdir(folder):
+                if file.endswith(repos[args.repo]['exeFileExt']):
+                    if repos[args.repo]['exeFileExt'] == ".md":
+                        exes.append(file[:-3])
+                    elif repos[args.repo]['exeFileExt'] == ".yml":
+                        ymlParsed = parseYaml(os.path.join(folder, file))
+                        for data in ymlParsed:
+                            if data is not None:
+                                exes.append(data['Name'])
     exes.sort(key=str.lower)
     maxLen = len(max(exes, key=len))
     cols = 5
@@ -542,6 +581,72 @@ def extractMdWadcoms(paths, attrs):
                                     subsequent_indent=subIndent))
             print(reset)
 
+def extractYmlHijack(paths, attrs):
+    """Extracts details of a specified executable with specified attributes from
+    the local copy of HijackLibs
+    """
+    ymls = []
+    for path in paths:
+        yml = (parseYaml(path))
+        if yml is not None:
+            ymls.append(yml)
+    vendors = [x.lower() for x in attrs['vendors']]
+    matches = []
+    for yml in ymls:
+        for data in yml:
+            if vendors:
+                if data['Vendor'].lower() not in vendors:
+                    continue
+            for exe in data['VulnerableExecutables']:
+                if exe['Type'] in attrs['attacktypes']:
+                    matches.append(data)
+                    break
+    if matches:
+        indent = "        "
+        for match in matches:
+            print("{0}{1}Author{2}: {3}\n".format(indent, bold, reset, 
+                                                  match['Author']))
+            print("{0}{1}Created{2}: {3}\n".format(indent, bold, reset,
+                                                   match['Created']))
+            print("{0}{1}Vendor{2}: {3}\n".format(indent, bold, reset,
+                                                  match['Vendor']))
+            print("{0}{1}Expected Locations{2}:\n".format(indent, bold, reset))
+            if "ExpectedLocations" in match.keys():
+                for loc in match['ExpectedLocations']:
+                    print("{0}{0}{1}{2}{3}\n".format(indent, dim, loc, reset))
+            else:
+                print("{0}{0}None\n".format(indent))
+            print("{0}{1}Vulnerable Executables{2}:\n".format(indent, bold,
+                                                              reset))
+            if "Vulnerable Executables" in match.keys():
+                for exe in match['VulnerableExecutables']:
+                    print("{0}{0}{1}{2}{3} ({4})\n".format(indent, dim,
+                                                           exe['Path'],
+                                                           reset, exe['Type']))
+            else:
+                print("{0}{0}None\n".format(indent))
+            print("{0}{1}Resources{2}:\n".format(indent, bold, reset))
+            if "Resources" in match.keys():
+                for res in match['Resources']:
+                    print("{0}{0}{1}\n".format(indent, res))
+            else:
+                print("{0}{0}None\n".format(indent))
+            print("{0}{1}Acknowledgements{2}:\n".format(indent, bold, reset))
+            if "Acknowledgements" in match.keys():
+                for ack in match['Acknowledgements']:
+                    if ack['Twitter']:
+                        print("{0}{0}{1} ({2})\n".format(indent, ack['Name'],
+                                                       ack['Twitter']))
+                    else:
+                        print("{0}{0}{1}\n".format(indent, ack['Name']))
+            else:
+                print("{0}{0}None\n".format(indent))
+            
+            
+    else:
+        errorNoCatResults()
+            
+
 def extract(args, paths, extractFunc):
     """Uses a specified extraction function to extract data on a specified
     executable with specified attributes from a specified repo
@@ -567,18 +672,26 @@ def extract(args, paths, extractFunc):
         attrs['os'] = args.os.lower().split(",")
     except:
         attrs['os'] = []
+    try:
+        attrs['vendors'] = args.vendors.lower().split(",")
+    except:
+        attrs['vendors'] = []
     for attr in attrs:
         if "all" in attrs[attr]:
-            attrs[attr] = list(repos[args.repo][attr].values())
-            attrs[attr].remove("all")
+            if attr != "vendors":
+                attrs[attr] = list(repos[args.repo][attr].values())
+                attrs[attr].remove("all")
+            else:
+                attrs[attr] = []
         else:
-            newVals = []
-            for val in attrs[attr]:
-                try:
-                    newVals.append(repos[args.repo][attr][val])
-                except:
-                    pass
-            attrs[attr] = newVals
+            if attr != "vendors":
+                newVals = []
+                for val in attrs[attr]:
+                    try:
+                        newVals.append(repos[args.repo][attr][val])
+                    except:
+                        pass
+                attrs[attr] = newVals
     extractFunc(paths, attrs)
 
 def errorExeNotFound(args):
@@ -707,6 +820,34 @@ def wadcomsSearch(args):
                                 repos['WADComs']['exeFileExt']))
     if len(paths):
         extract(args, paths, extractMdWadcoms)
+    else:
+        errorExeNotFound(args)
+
+def hijackSearch(args):
+    """Searches local copy of HighjackLibs for a specified executable with
+    specified attributes
+    """
+    repCheck(args.repo)
+    exe = args.executable.lower()
+    exeSplit = exe.split(".")
+    if len(exeSplit) > 1:
+        exe = ".".join(exeSplit[:-1])
+    paths = []
+    for folder in repos[args.repo]['exeDirs']:
+        folder = os.path.join(repos[args.repo]['dir'], folder)
+        for folder in glob(folder):
+            for file in os.listdir(folder):
+                path = os.path.join(folder, file)
+                if exe == "all":
+                    paths.append(path)
+                elif file == "{0}{1}".format(exe,
+                                             repos[args.repo]['exeFileExt']):
+                    paths.append(path)
+    if paths:
+        for path in paths:
+            print(green + bold + path.split("/")[-1].split(".")[0] + ".dll" +
+                  reset + green + ":\n" + reset)
+            extract(args, [path], extractYmlHijack)
     else:
         errorExeNotFound(args)
 
