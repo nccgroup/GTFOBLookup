@@ -21,7 +21,12 @@ GTFOBLookup requires the following non-standard Python libraries to be installed
 These can all be installed with the following command: `pip install -r requirements.txt`
 
 ## Installation/Setup
-To install GTFOBLookup, git clone the repository to your machine and run `gtfoblookup.py update` whilst connected to the internet:
+It is recommended to install GTFOBLookup using pipx:
+<pre>
+pipx install git+https://github.com/nccgroup/GTFOBLookup.git
+</pre>
+
+Once installed, run `gtfoblookup.py update` whilst connected to the internet to download local copies of the repositories.
 
 ## Usage
 On Linux, navigate to the GTFOBLookup directory and run `man ./gtfoblookup.1` or see below:

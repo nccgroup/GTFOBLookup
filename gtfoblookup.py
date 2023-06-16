@@ -876,11 +876,15 @@ def parseFile(args):
             args.executable = exe
             search(args)
 
-if __name__ == "__main__":
+def main():
+    """Main method"""
     if sys.version_info[0] < 3:
 	    print(red + "Some functionality only works with Python3. Please " + 
 			  "switch to using Python3 to make the most of GTFOBLookup." + 
 			  reset)
-    args = genParser().parse_args()
+    args = genParser().parse_args(sys.argv[1:])
     colorama.init()
     args.func(args)
+
+if __name__ == "__main__":
+    main()
